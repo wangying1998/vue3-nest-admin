@@ -1,0 +1,26 @@
+{
+  "name": "my-vue-app",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
+    "axios": "^0.27.2",
+    "echarts": "^5.4.2",
+    "element-plus": "^2.1.7",
+    "sass": "^1.49.11",
+    "vue": "^3.2.16",
+    "vue-router": "^4.0.14",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.9.3",
+    "unplugin-auto-import": "^0.6.9",
+    "unplugin-element-plus": "^0.3.4",
+    "unplugin-vue-components": "^0.18.5",
+    "vite": "^2.6.4"
+  }
+}

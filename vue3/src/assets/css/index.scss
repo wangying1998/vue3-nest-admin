@@ -1,0 +1,65 @@
+// You should use them in scss, because we calculate it by sass.
+// comment next lines to use default color
+@forward "element-plus/theme-chalk/src/common/var.scss" with (
+    // do not use same name, it will override.
+    $colors:
+        (
+            "primary": (
+                "base": #ff2183,
+            ),
+            // "success": (
+            //     "base": #21ba45,
+            // ),
+            // "warning": (
+            //     "base": #f2711c,
+            // ),
+            // "danger": (
+            //     "base": #db2828,
+            // ),
+            // "error": (
+            //     "base": #db2828,
+            // ),
+            // "info": (
+            //     "base": #42b8dd,
+            // )
+        ),
+    $fill-color: (
+        // "blank": #272E43,
+    ),
+    $bg-color: (
+
+    ),
+    $border-color: (
+        'lighter': #3D4356,
+    ),
+    $text-color: (
+        
+    ),
+    $overlay-color: (
+        
+    ),
+    $table: (
+        'bg-color': #272E43,
+        'tr-bg-color': #272E43,
+        'row-hover-bg-color': #1b2339,
+        'header-bg-color': #3D4356,
+        'header-text-color': #ffffff,
+        'text-color': #ffffff,
+    ),
+    $button: (
+    ),
+    $input: (
+        'bg-color': #fff,
+        'border-color': #dcdfe6,
+    ),
+    $radio: (
+        'input-bg-color': #fff
+    ),
+    $button-padding-horizontal: ("default": 50px)
+);
+
+// if you want to import all
+// @use "element-plus/theme-chalk/src/index.scss" as *;
+
+// You can comment it to hide debug info.
+// @debug $--colors;

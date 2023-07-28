@@ -1,0 +1,73 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    /* 火狐滚动条样式 */
+    scrollbar-width: thin;
+    scrollbar-color:  #DDDEE0 transparent;
+    -ms-overflow-style:none;
+
+    --text-color: #F04969;
+    --bg-color: #FF2183;
+}
+/* 滚动条全局设置 */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    border-radius: 8px;
+}
+::-webkit-scrollbar-thumb {
+    width: 6px;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+::-webkit-scrollbar-track {
+    width: 6px;
+    border-radius: 6px;
+    background-color: transparent;
+}
+
+.flex {
+    display: flex;
+}
+.fl-sta-cen {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.fl-cen-cen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.fl-bet-cen {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.fl-row-reverse {
+    flex-direction: row-reverse;
+}
+
+
+.cursor {
+    cursor: pointer;
+}
+
+
+.mr-t-20 {
+    margin-top: 20px;
+}
+
+ul {
+    list-style: none;
+}
+
+.full-width {
+    width: 100%;
+}
