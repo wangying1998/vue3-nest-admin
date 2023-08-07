@@ -5,14 +5,12 @@
  *
  */
 
-import { Column, Entity, Generated, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import { IdAbs } from 'src/AbstructEntity/id.abs';
 import { SexRole } from './../EnumList/sexRole';
 
 @Entity()
-export class User {
-    @PrimaryGeneratedColumn()
-    id: number;
-
+export class User extends IdAbs {
     @Column({
         comment: 'UID',
         nullable: false,

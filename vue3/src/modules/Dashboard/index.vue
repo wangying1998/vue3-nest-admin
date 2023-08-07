@@ -5,7 +5,7 @@
                 <Chart
                     ref="pieChart"
                     domId="pie-echart"
-                    :chartOptions="pieChartOptions"
+                    :chart-options="pieChartOptions"
                     :height="240"
                 />
             </el-col>
@@ -13,7 +13,7 @@
                 <Chart
                     ref="barChart"
                     domId="bar-echart"
-                    :chartOptions="barChartOptions"
+                    :chart-options="barChartOptions"
                     :height="240"
                 />
             </el-col>
@@ -41,7 +41,7 @@
                 <Chart
                     ref="lineChart"
                     domId="line-echart"
-                    :chartOptions="lineChartOptions"
+                    :chart-options="lineChartOptions"
                     :height="240"
                 />
             </el-col>

@@ -37,7 +37,12 @@ const moduleRoutes = {
                     component: () => import('../modules/UserManage/UserList/index.vue')
                 }
             ]
-        }
+        },
+        {
+            path: "/MenuManage",
+            name: "MenuManage",
+            component: () => import("../modules/MenuManage/index.vue")
+        },
     ],
 };
 const router = createRouter({

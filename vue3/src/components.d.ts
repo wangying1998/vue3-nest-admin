@@ -32,6 +32,8 @@ declare module 'vue' {
     Sidebar: typeof import('./components/common/Sidebar.vue')['default']
     SubMenu: typeof import('./components/common/SubMenu.vue')['default']
     Table: typeof import('./components/TableComponent/Table.vue')['default']
+    TableTree: typeof import('./components/TableComponent/TableTree.vue')['default']
+    Tree: typeof import('./components/TreeComponent/Tree.vue')['default']
   }
 }
 

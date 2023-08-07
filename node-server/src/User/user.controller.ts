@@ -1,17 +1,10 @@
 import {
     Body,
     Controller,
-    Delete,
-    Get,
-    Param,
     Post,
-    Put,
-    Query,
-    Redirect,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import AppDataSource from 'src/DataSource/app-data-source';
-import { PageDTO } from './dto/user.dto';
+import { PageDTO } from '../DTO/page.dto';
 
 @Controller('user')
 export class UserController {

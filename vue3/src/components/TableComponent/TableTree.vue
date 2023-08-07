@@ -6,13 +6,10 @@
             :height="height"
             :row-key="rowKey"
             :reserve-selection="reserveSelection"
+            :tree-props="treeProps"
+            @selection-change="handleSelectionChange"
         >
-            <el-table-column
-                type="selection"
-                width="55"
-                @selection-change="handleSelectionChange"
-                v-if="hasSelection"
-            />
+            <el-table-column type="selection" width="55" v-if="hasSelection" />
             <!-- <el-table-column type="index" width="50" /> -->
             <el-table-column
                 v-for="col in columns"
@@ -56,6 +53,13 @@ export default {
         data: {
             type: Array,
             default: () => [],
+        },
+        treeProps: {
+            type: Object,
+            default: {
+                hasChildren: "hasChildren",
+                children: "children",
+            },
         },
         height: {
             type: String,

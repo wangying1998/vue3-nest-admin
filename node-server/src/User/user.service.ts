@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { User } from 'src/Entity/user.entity';
-import { PageDTO } from './dto/user.dto';
+import { PageDTO } from '../DTO/page.dto';
 
 @Injectable()
 export class UserService {
@@ -14,13 +14,13 @@ export class UserService {
         pageDTO: PageDTO
     ): Promise<Object> {
         const { page = 1, size = 10, uid = '' } = pageDTO;
-        let str = "";
-        if(uid) {
-            str = "user.uid LIKE :uid"
-        }
         const getList = this.userRepository
         .createQueryBuilder('user')
-        .where(str, { uid: `%${uid}%` })
+        .where(
+            new Brackets((qb) => {
+                uid ? qb.where("user.uid LIKE :uid", { uid: `%${uid}%` }): ''
+            })
+        )
         .select()
         .skip(page)
         .take(size)

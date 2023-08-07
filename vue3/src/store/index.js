@@ -1,6 +1,6 @@
 import { createStore } from 'vuex';
 
-import { menuList } from '../tools/menuMock';
+import menuList from '../tools/menuMock';
 
 // 创建一个新的 store 实例
 const store = createStore({

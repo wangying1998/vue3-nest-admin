@@ -21,7 +21,7 @@
             :data="tableData"
             :columns="columns"
             class="mr-t-20"
-            :hasOperate="true"
+            :has-operate="true"
             @operate="operateHandle"
         ></Table>
         <AddUser
@@ -60,28 +60,28 @@ export default {
 
         columns = [
             {
-                prop: "uid",
                 label: "UID",
+                prop: "uid",
             },
             {
-                prop: "name",
                 label: "姓名",
+                prop: "name",
             },
             {
-                prop: "sex",
                 label: "性别",
+                prop: "sex",
             },
             {
-                prop: "age",
                 label: "年龄",
+                prop: "age",
             },
             {
-                prop: "mobile",
                 label: "手机号",
+                prop: "mobile",
             },
             {
-                prop: "email",
                 label: "邮箱",
+                prop: "email",
             },
         ];
 
