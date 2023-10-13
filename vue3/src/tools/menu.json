@@ -20,5 +20,15 @@
         "title": "菜单管理",
         "name": "MenuManage",
         "icon": ""
+    },
+    {
+        "title": "可视化",
+        "name": "Charts",
+        "icon": ""
+    },
+    {
+        "title": "拖拽",
+        "name": "Drag",
+        "icon": ""
     }
 ]

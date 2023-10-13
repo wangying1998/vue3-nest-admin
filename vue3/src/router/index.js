@@ -43,6 +43,26 @@ const moduleRoutes = {
             name: "MenuManage",
             component: () => import("../modules/MenuManage/index.vue")
         },
+        {
+            path: "/Visualize",
+            name: "Visualize",
+            component: () => import("../modules/Visualize/index.vue"),
+            redirect: {
+                name: 'Charts'
+            },
+            children: [
+                {
+                    path: "/Visualize/Charts",
+                    name: "Charts",
+                    component: () => import("../modules/Visualize/Charts/index.vue")
+                }
+            ]
+        },
+        {
+            path: "/Drag",
+            name: "Drag",
+            component: () => import("../modules/Drag/index.vue"),
+        },
     ],
 };
 const router = createRouter({

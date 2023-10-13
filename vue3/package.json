@@ -13,14 +13,22 @@
     "element-plus": "^2.1.7",
     "sass": "^1.49.11",
     "vue": "^3.2.16",
+    "vue-grid-layout": "3.0.0-beta1",
     "vue-router": "^4.0.14",
+    "vue3-grid-layout-next": "^1.0.6",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.9.3",
+    "prettier": "^3.0.3",
     "unplugin-auto-import": "^0.6.9",
     "unplugin-element-plus": "^0.3.4",
     "unplugin-vue-components": "^0.18.5",
     "vite": "^2.6.4"
+  },
+  "prettier": {
+    "useTabs": false,
+    "tabWidth": 4,
+    "singleQuote": true
   }
 }

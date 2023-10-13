@@ -35,6 +35,9 @@
 .flex {
     display: flex;
 }
+.fl-col {
+    flex-direction: column;
+}
 .fl-sta-cen {
     display: flex;
     justify-content: flex-start;
@@ -53,6 +56,12 @@
 .fl-row-reverse {
     flex-direction: row-reverse;
 }
+.fl-wrap {
+    flex-wrap: wrap;
+}
+.fl-item {
+    flex: 1;
+}
 
 
 .cursor {
@@ -70,4 +79,8 @@ ul {
 
 .full-width {
     width: 100%;
+}
+
+.full-height {
+    height: 100%;
 }

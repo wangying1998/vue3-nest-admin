@@ -8,7 +8,7 @@
                     placeholder="请输入UID进行查询"
                     clearable
                     @clear="getUserList"
-                    @keyup.enter.native="getUserList"
+                    @keyup.enter="getUserList"
                     style="width: 200px; margin-right: 12px"
                 ></el-input>
                 <el-button type="primary" plain @click="getUserList">
