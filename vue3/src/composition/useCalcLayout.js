@@ -50,8 +50,7 @@ export default function useCalcLayout() {
      * @param {*} left 鼠标当前所处位置 距离 容器左边的像素值
      * @returns 由距离换算出的 layout 的 单元格占位
      */
-    function calcXY(position, top, left) {
-        console.log(1111, position)
+    function calcXY(top, left) {
         let colWidth = calcColWidth();
         // left = colWidth * x + margin * (x + 1)
         // l = cx + m(x+1)
@@ -61,14 +60,6 @@ export default function useCalcLayout() {
         // (l - m) / (c + m) = x
         // x = (left - margin) / (coldWidth + margin)
 
-        
-        if (position.x + position.w > colNum) {
-            innerW = position.w > colNum ? colNum : position.w;
-        } else {
-            innerW = position.w;
-        }
-    
-        console.log(left)
         let x = Math.round((left - margin[0]) / (colWidth + margin[0]));
         // Capping
         let y = Math.round((top - margin[1]) / (rowHeight + margin[1]));

@@ -1,5 +1,5 @@
 <template>
-    <div class="full-height flex fl-col">
+    <div class="full-height flex">
         <div class="side-box fl-sta-cen fl-col">
             <div
                 class="element fl-cen-cen cursor"
@@ -141,7 +141,7 @@ export default {
                 if (index !== -1) {
                     try {
                         gridlayout.value.$refs.item.children[
-                            layoutData.length
+                            layoutData.length - 1
                         ].style.display = 'none';
                     } catch (err) {
                         console.log(err);
@@ -158,7 +158,6 @@ export default {
                         document.querySelector('#content').clientWidth;
                     // 转换成 容器范围内的位置
                     let new_pos = calcXY(
-                        DragPos,
                         mouseXY.y - parentRect.top,
                         mouseXY.x - parentRect.left,
                     );
@@ -288,12 +287,11 @@ export default {
     width: 50%;
     height: 50px;
     margin-top: 10px;
-    // border: 1px solid;
     background-color: azure;
     color: #121212;
 }
 #content {
-    border: 1px solid;
+    // border: 1px solid;
 }
 </style>
 
@@ -304,6 +302,6 @@ export default {
     padding: 10px;
 }
 .vue-grid-item.vue-grid-placeholder {
-    // background: #85d5fd !important;
+    background: #85d5fd !important;
 }
 </style>
