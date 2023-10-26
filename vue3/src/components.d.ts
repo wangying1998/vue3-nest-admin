@@ -4,6 +4,7 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    BarChart: typeof import('./components/charts/BarChart.vue')['default']
     Chart: typeof import('./components/charts/Chart.vue')['default']
     ChartHeader: typeof import('./components/charts/ChartHeader.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
@@ -21,7 +22,9 @@ declare module 'vue' {
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     Header: typeof import('./components/common/Header.vue')['default']
     Layout: typeof import('./components/Layout/Layout.vue')['default']
+    LineChart: typeof import('./components/charts/LineChart.vue')['default']
     Main: typeof import('./components/common/Main.vue')['default']
+    PieChart: typeof import('./components/charts/PieChart.vue')['default']
     Sidebar: typeof import('./components/common/Sidebar.vue')['default']
     SubMenu: typeof import('./components/common/SubMenu.vue')['default']
     Table: typeof import('./components/TableComponent/Table.vue')['default']

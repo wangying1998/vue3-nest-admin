@@ -1,6 +1,6 @@
 <template>
-    <div class="chart-box">
-        <ChartHeader :title="chartOptions.title" />
+    <div class="contain-box">
+        <ChartHeader :title="chartOptions.title" v-show="headerShow" />
         <div
             :id="domId"
             :style="{ width: '100%', height: height + 'px' }"
@@ -22,7 +22,7 @@ import {
 } from "echarts/components";
 import { LabelLayout, UniversalTransition } from "echarts/features";
 import { CanvasRenderer } from "echarts/renderers";
-import { onMounted, ref } from "vue";
+import { nextTick, onMounted, onUnmounted, ref } from "vue";
 
 echarts.use([
     TitleComponent,
@@ -53,6 +53,10 @@ export default {
             type: Object,
             default: () => {},
         },
+        headerShow: {
+            type: Boolean,
+            default: true,
+        }
     },
     setup(props, { emit }) {
         let chart = null;
@@ -67,12 +71,20 @@ export default {
         };
 
         const resize = () => {
-            chart && chart.resize();
+            setTimeout(() => {
+                chart && chart.resize();
+            }, 0);
         };
 
         onMounted(() => {
+            console.log(123456)
             initChart();
             draw();
+            window.addEventListener('resize', resize, null, false);
+        });
+
+        onUnmounted(() => {
+            window.removeEventListener('resize', resize);
         });
 
         return {
@@ -84,9 +96,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chart-box {
-    background-color: #272E43;
-    border-radius: 8px;
-    padding: 15px;
+.contain-box {
+    // background-color: transparent;
+    // background-color: #272E43;
+    // border-radius: 8px;
+    // padding: 15px;
 }
 </style>

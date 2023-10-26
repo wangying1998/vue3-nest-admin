@@ -24,14 +24,14 @@ export default {
 
 <style lang="scss" scoped>
 .chart-title {
-        &::before {
-            content: "";
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            margin-right: 5px;
-            border-radius: 3px;
-            background-color: var(--bg-color);
-        }
+    &::before {
+        content: "";
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        margin-right: 5px;
+        border-radius: 3px;
+        background-color: var(--bg-color);
     }
+}
 </style>

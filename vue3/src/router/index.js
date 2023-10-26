@@ -44,19 +44,9 @@ const moduleRoutes = {
             component: () => import("../modules/MenuManage/index.vue")
         },
         {
-            path: "/Visualize",
-            name: "Visualize",
-            component: () => import("../modules/Visualize/index.vue"),
-            redirect: {
-                name: 'Charts'
-            },
-            children: [
-                {
-                    path: "/Visualize/Charts",
-                    name: "Charts",
-                    component: () => import("../modules/Visualize/Charts/index.vue")
-                }
-            ]
+            path: "/Visiualize",
+            name: "Visiualize",
+            component: () => import("../modules/Visiualize/index.vue"),
         },
         {
             path: "/Drag",

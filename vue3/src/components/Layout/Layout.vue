@@ -1,19 +1,27 @@
 <template>
     <div class="full-height flex">
-        <div class="side-box fl-sta-cen fl-col">
-            <div
-                class="element fl-cen-cen cursor"
+        <ul class="side-box fl-sta-cen fl-col mr-r-20 radius-8">
+            <li
+                v-for="(item, index) in dragElementList"
+                :key="index"
+                class="element fl-sta-cen cursor-move radius-8"
                 draggable="true"
                 unselectable="true"
-                @drag="drag"
-                @dragend="dragend"
+                @drag="drag(item)"
+                @dragend="dragend(item)"
             >
-                元素
-            </div>
-        </div>
-        <div class="fl-item">
+                <svg class="icon-box mr-r-10" aria-hidden="true">
+                    <use :xlink:href="item.icon"></use>
+                </svg>
+                <div>
+                    {{ item.label }}
+                </div>
+            </li>
+        </ul>
+        <div class="fl-item radius-8 border">
             <div id="content">
                 <grid-layout
+                    v-if="data.length"
                     ref="gridlayout"
                     :layout="data"
                     :col-num="colNum"
@@ -26,35 +34,81 @@
                     :use-css-transforms="useCssTransforms"
                 >
                     <grid-item
-                        v-for="item in data"
+                        v-for="(item, index) in data"
                         :key="item.i"
                         :i="item.i"
                         :x="item.x"
                         :y="item.y"
                         :w="item.w"
                         :h="item.h"
+                        :id="'contain-' + item.i"
+                        @resize="resizeEvent(item)"
+                        @resized="resizeEvent(item)"
+                        @moved="movedEvent"
+                        @container-resized="containerResizedEvent"
                     >
-                        {{ item.i }}
+                        <div class="full-width" v-if="item.type === 'line'">
+                            <LineChart
+                                :dom-id="'chart-' + item.i"
+                                :height="item.chartHeight"
+                            />
+                        </div>
+                        <div class="full-width" v-else-if="item.type === 'bar'">
+                            <BarChart
+                                :dom-id="'chart-' + item.i"
+                                :height="item.chartHeight"
+                            />
+                        </div>
+                        <div class="full-width" v-else-if="item.type === 'pie'">
+                            <PieChart
+                                :dom-id="'chart-' + item.i"
+                                :height="item.chartHeight"
+                            />
+                        </div>
+                        <div v-else>
+                            {{ item.i }}
+                        </div>
+
+                        <i
+                            class="remove-icon iconfont icon-jianqu"
+                            @click="removeItem(index)"
+                        ></i>
+                        <span class="vue-resizable-handle">
+                            <i class="resize-icon iconfont icon-zhijiao"></i>
+                        </span>
                     </grid-item>
                 </grid-layout>
+                <div v-else class="full-height fl-cen-cen no-data">
+                    拖拽左侧模块至此处
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { nextTick, onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 import { GridLayout, GridItem } from 'vue-grid-layout';
 import useCalcLayout from '@/composition/useCalcLayout.js';
+import LineChart from '../../components/charts/LineChart.vue';
+import BarChart from '../../components/charts/BarChart.vue';
+import PieChart from '../../components/charts/PieChart.vue';
 export default {
     components: {
         GridLayout,
         GridItem,
+        LineChart,
+        BarChart,
+        PieChart,
     },
     props: {
         data: {
             type: Array,
-            default: () => []
+            default: () => [],
+        },
+        dragElementList: {
+            type: Array,
+            default: () => [],
         },
     },
     setup(props, { emit }) {
@@ -103,9 +157,13 @@ export default {
                 },
                 false,
             );
+
+            setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+            }, 0);
         });
 
-        const drag = function (e) {
+        const drag = function (data) {
             nextTick(() => {
                 let parentRect = document
                     .getElementById('content')
@@ -133,6 +191,8 @@ export default {
                         w: defaultSize.w,
                         h: defaultSize.h,
                         i: 'drop',
+                        type: data.type,
+                        chartHeight: data.chartHeight
                     });
                 }
 
@@ -171,13 +231,12 @@ export default {
                             defaultSize.h,
                             defaultSize.w,
                         );
-                        DragPos.i = String(index);
+                        DragPos.i = Math.random().toString(36).substr(2);
                         DragPos.x = layoutData[index].x;
                         DragPos.y = layoutData[index].y;
                     }
 
                     if (mouseInGrid === false) {
-                        console.log(101010101010, false)
                         gridlayout.value.dragEvent(
                             'dragend',
                             'drop',
@@ -195,7 +254,7 @@ export default {
             });
         };
 
-        const dragend = function (e) {
+        const dragend = function (data) {
             nextTick(() => {
                 let parentRect = document
                     .getElementById('content')
@@ -226,8 +285,10 @@ export default {
                         w: defaultSize.w,
                         h: defaultSize.h,
                         i: DragPos.i,
+                        type: data.type,
+                        chartHeight: data.chartHeight
                     });
-                    
+
                     emit('update:data', layoutData);
 
                     gridlayout.value.dragEvent(
@@ -238,25 +299,58 @@ export default {
                         defaultSize.w,
                         defaultSize.h,
                     );
-                    
-                    // console.log(gridlayout.value.$refs.item)
+
                     // try {
                     //     gridlayout.value.$refs.item.children[
                     //         layoutData.length
                     //     ].$refs.item.style.display = 'block';
                     // } catch (err) {
-                    //     console.log(err);
+                    //     console.error(err);
                     // }
                     mouseXY = { x: null, y: null };
                     DragPos = { x: null, y: null, w: 3, h: 4, i: null };
+                    nextTick(() => {
+                        window.dispatchEvent(new Event('resize'));
+                    });
                 }
             });
         };
 
-        
+        const removeItem = function (index) {
+            layoutData.splice(index, 1);
+            emit('update:data', layoutData);
+        };
+
+        // watch
+        watch(
+            () => props.data,
+            (val) => {
+                layoutData = val;
+            },
+        );
+
+        const resizeEvent = function (item) {
+            let dom = document.querySelector('#contain-' + item.i);
+            nextTick(() => {
+                item.chartHeight = dom.clientHeight - 60;
+                window.dispatchEvent(new Event('resize'));
+            });
+        };
+        const movedEvent = function () {
+            nextTick(() => {
+                window.dispatchEvent(new Event('resize'));
+            });
+        };
+        const containerResizedEvent = function () {
+            nextTick(() => {
+                window.dispatchEvent(new Event('resize'));
+            });
+        };
+
         return {
             props,
             gridlayout,
+            layoutData,
 
             // useCalcLayout
             margin,
@@ -273,6 +367,10 @@ export default {
 
             drag,
             dragend,
+            removeItem,
+            resizeEvent,
+            movedEvent,
+            containerResizedEvent,
         };
     },
 };
@@ -280,28 +378,56 @@ export default {
 
 <style lang="scss" scoped>
 .side-box {
-    width: 200px;
-    border: 1px solid;
-}
-.element {
-    width: 50%;
-    height: 50px;
-    margin-top: 10px;
-    background-color: azure;
-    color: #121212;
+    width: 180px;
+    border: #999 1px solid;
+    .element {
+        width: 90%;
+        height: 50px;
+        padding: 10px;
+        margin-top: 10px;
+        background-color: #fff;
+        color: #121212;
+    }
+    .icon-box {
+        width: 28px;
+        height: 28px;
+    }
 }
 #content {
-    // border: 1px solid;
+    height: 100%;
+    border: #999 1px solid;
+}
+.remove-icon {
+    position: absolute;
+    right: -5px;
+    top: -5px;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text-color);
+}
+.resize-icon {
+    color: var(--text-color);
+    font-size: 10px;
+}
+.no-data {
+    color: rgba($color: #ffffff, $alpha: 0.3);
+    font-size: 40px;
+    letter-spacing: .5em;
 }
 </style>
 
 <style lang="scss">
 .vue-grid-item {
-    color: #121212;
-    background-color: #ffffff;
-    padding: 10px;
+    background-color: #272e43;
+    padding: 20px;
+    border-radius: 8px;
 }
 .vue-grid-item.vue-grid-placeholder {
-    background: #85d5fd !important;
+    background: #fff !important;
+}
+.vue-grid-item > .vue-resizable-handle {
+    background: none;
+    padding: 3px 0 0 0;
+    transform: rotate(270deg);
 }
 </style>

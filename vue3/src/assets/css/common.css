@@ -12,6 +12,15 @@
     --text-color: #F04969;
     --bg-color: #FF2183;
 }
+
+.icon-box {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+}
+
 /* 滚动条全局设置 */
 ::-webkit-scrollbar {
     width: 6px;
@@ -32,6 +41,7 @@
     background-color: transparent;
 }
 
+/* flex */
 .flex {
     display: flex;
 }
@@ -63,24 +73,39 @@
     flex: 1;
 }
 
-
+/* cursor */
 .cursor {
     cursor: pointer;
 }
+.cursor-move {
+    cursor: move;
+}
 
-
+/* margin */
 .mr-t-20 {
     margin-top: 20px;
 }
+.mr-r-20 {
+    margin-right: 20px;
+}
+.mr-r-10 {
+    margin-right: 10px;
+}
 
+/* ul */
 ul {
     list-style: none;
 }
 
+/* size */
 .full-width {
     width: 100%;
 }
-
 .full-height {
     height: 100%;
+}
+
+/* radius */
+.radius-8 {
+    border-radius: 8px;
 }
