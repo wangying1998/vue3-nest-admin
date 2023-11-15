@@ -4,9 +4,10 @@ import router from './router';
 import store from './store';
 import './assets/css/element.css';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
-import globalMsg from './tools/globalMessage';
+import globalMsg from './components/MsgComponent/globalMessage';
 import VueGridLayout from 'vue-grid-layout';
-import '//at.alicdn.com/t/c/font_4301192_u0iw2qxwi6.js';
+// iconfont
+import '//at.alicdn.com/t/c/font_4301192_sgjzk700vfl.js';
 
 console.log('当前环境：', import.meta.env.MODE);
 

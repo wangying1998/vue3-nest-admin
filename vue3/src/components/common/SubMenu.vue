@@ -1,17 +1,17 @@
 <template>
     <div>
         <el-menu
-            background-color="#1B2339"
+            background-color="#272E43"
             text-color="#FFFFFF"
             active-text-color="#F04969"
             :default-active="activeNav"
             @select="navChange"
         >
-            <template v-for="(submenu, index) in menuList" :key="submenu.key">
+            <template v-for="(submenu,) in menuList" :key="submenu.key">
                 <el-sub-menu :index="submenu.name" v-if="submenu.children">
                     <template #title>{{ submenu.title }}</template>
                     <el-menu-item
-                        v-for="(item, subIndex) in submenu.children"
+                        v-for="(item) in submenu.children"
                         :index="item.name"
                         :key="item.key"
                     >

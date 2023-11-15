@@ -11,17 +11,17 @@
                 @dragend="dragend(item)"
             >
                 <svg class="icon-box mr-r-10" aria-hidden="true">
-                    <use :xlink:href="item.icon"></use>
+                    <use :xlink:href="'#' + item.icon"></use>
                 </svg>
                 <div>
                     {{ item.label }}
                 </div>
             </li>
         </ul>
-        <div class="fl-item radius-8 border">
+        <div class="fl-item radius-8 border ov-auto">
             <div id="content">
                 <grid-layout
-                    v-if="data.length"
+                    v-show="data.length"
                     ref="gridlayout"
                     :layout="data"
                     :col-num="colNum"
@@ -42,44 +42,35 @@
                         :w="item.w"
                         :h="item.h"
                         :id="'contain-' + item.i"
+                        :class="item.isFullScreen ? 'contain-full-screen' : ''"
                         @resize="resizeEvent(item)"
                         @resized="resizeEvent(item)"
-                        @moved="movedEvent"
-                        @container-resized="containerResizedEvent"
+                        @moved="resizeEvent(item)"
+                        @container-resized="resizeEvent(item)"
                     >
-                        <div class="full-width" v-if="item.type === 'line'">
-                            <LineChart
+                        <div class="full-width" :is-full-screen="item.isFullScreen">
+                            <Chart
+                                :node-data="item"
                                 :dom-id="'chart-' + item.i"
                                 :height="item.chartHeight"
+                                :title="item.title"
+                                :chart-type="item.type"
+                                :chart-data="item.options"
+                                @resize:element="resizeEvent"
+                                @edit:element="editEvent"
                             />
                         </div>
-                        <div class="full-width" v-else-if="item.type === 'bar'">
-                            <BarChart
-                                :dom-id="'chart-' + item.i"
-                                :height="item.chartHeight"
-                            />
-                        </div>
-                        <div class="full-width" v-else-if="item.type === 'pie'">
-                            <PieChart
-                                :dom-id="'chart-' + item.i"
-                                :height="item.chartHeight"
-                            />
-                        </div>
-                        <div v-else>
-                            {{ item.i }}
-                        </div>
-
-                        <i
-                            class="remove-icon iconfont icon-jianqu"
-                            @click="removeItem(index)"
-                        ></i>
                         <span class="vue-resizable-handle">
                             <i class="resize-icon iconfont icon-zhijiao"></i>
                         </span>
+                        <i
+                            class="remove-icon iconfont icon-shanchu cursor"
+                            @click="removeHandle(index)"
+                        ></i>
                     </grid-item>
                 </grid-layout>
-                <div v-else class="full-height fl-cen-cen no-data">
-                    拖拽左侧模块至此处
+                <div v-show="!data.length" class="full-height fl-cen-cen no-data">
+                    <!-- 拖拽左侧模块至此处 -->
                 </div>
             </div>
         </div>
@@ -90,16 +81,12 @@
 import { nextTick, onMounted, ref, watch } from 'vue';
 import { GridLayout, GridItem } from 'vue-grid-layout';
 import useCalcLayout from '@/composition/useCalcLayout.js';
-import LineChart from '../../components/charts/LineChart.vue';
-import BarChart from '../../components/charts/BarChart.vue';
-import PieChart from '../../components/charts/PieChart.vue';
+import Chart from '@/components/ChartComponent/Chart.vue';
 export default {
     components: {
         GridLayout,
         GridItem,
-        LineChart,
-        BarChart,
-        PieChart,
+        Chart,
     },
     props: {
         data: {
@@ -142,13 +129,19 @@ export default {
             calcXY,
         } = useCalcLayout();
 
+
         let layoutData = props.data;
+        // 初始化各个元素的全屏状态为false
+        layoutData.forEach(layoutDatum => {
+            layoutDatum.isFullScreen = false;
+        })
 
         let mouseXY = { x: null, y: null };
         let DragPos = { x: null, y: null, w: 1, h: 1, i: null };
         const gridlayout = ref(null);
 
         onMounted(() => {
+            // 全局增加 dragover 事件，便于获取鼠标位置
             document.addEventListener(
                 'dragover',
                 function (ev) {
@@ -158,11 +151,16 @@ export default {
                 false,
             );
 
+            // 主动触发窗口resize，保证图表尺寸正确
             setTimeout(() => {
                 window.dispatchEvent(new Event('resize'));
             }, 0);
         });
 
+        /**
+         * 拖拽事件，判断鼠标位置决定页面显示，计算新增元素位置
+         * @param {*} data 
+         */
         const drag = function (data) {
             nextTick(() => {
                 let parentRect = document
@@ -184,16 +182,17 @@ export default {
                     mouseInGrid === true &&
                     layoutData.findIndex((item) => item.i === 'drop') === -1
                 ) {
-                    layoutData.push({
+                    let node = {
                         x: (layoutData.length * 2) % colNum,
                         // puts it at the bottom
                         y: layoutData.length + colNum,
                         w: defaultSize.w,
                         h: defaultSize.h,
                         i: 'drop',
-                        type: data.type,
-                        chartHeight: data.chartHeight
-                    });
+                        ...data
+                    };
+                    node.title = node.i;
+                    layoutData.push(node);
                 }
 
                 let index = layoutData.findIndex((item) => item.i === 'drop');
@@ -254,6 +253,10 @@ export default {
             });
         };
 
+        /**
+         * 结束拖拽，将数据对象加入数据列表，并放置在所选位置
+         * @param {Object} data 新增数据对象 
+         */
         const dragend = function (data) {
             nextTick(() => {
                 let parentRect = document
@@ -279,15 +282,16 @@ export default {
                     );
                     layoutData = layoutData.filter((obj) => obj.i !== 'drop');
 
-                    layoutData.push({
+                    let node = {
                         x: DragPos.x,
                         y: DragPos.y,
                         w: defaultSize.w,
                         h: defaultSize.h,
                         i: DragPos.i,
-                        type: data.type,
-                        chartHeight: data.chartHeight
-                    });
+                        ...data
+                    };
+                    node.title = node.i;
+                    layoutData.push(node);
 
                     emit('update:data', layoutData);
 
@@ -316,12 +320,19 @@ export default {
             });
         };
 
-        const removeItem = function (index) {
+        /**
+         * 删除 grid-item
+         * @param {Number} index 元素下标
+         */
+        const removeHandle = function (index) {
             layoutData.splice(index, 1);
+            // 更新父组件数据
             emit('update:data', layoutData);
         };
 
-        // watch
+        /**
+         * watch
+         */
         watch(
             () => props.data,
             (val) => {
@@ -329,6 +340,10 @@ export default {
             },
         );
 
+        /**
+         * grid-item resize
+         * @param {Object} item 数据对象
+         */
         const resizeEvent = function (item) {
             let dom = document.querySelector('#contain-' + item.i);
             nextTick(() => {
@@ -336,17 +351,12 @@ export default {
                 window.dispatchEvent(new Event('resize'));
             });
         };
-        const movedEvent = function () {
-            nextTick(() => {
-                window.dispatchEvent(new Event('resize'));
-            });
-        };
-        const containerResizedEvent = function () {
-            nextTick(() => {
-                window.dispatchEvent(new Event('resize'));
-            });
-        };
 
+
+        const editEvent = function (data) {
+            emit('edit:element', data);
+        };
+        
         return {
             props,
             gridlayout,
@@ -367,10 +377,9 @@ export default {
 
             drag,
             dragend,
-            removeItem,
             resizeEvent,
-            movedEvent,
-            containerResizedEvent,
+            editEvent,
+            removeHandle,
         };
     },
 };
@@ -393,24 +402,31 @@ export default {
         height: 28px;
     }
 }
-#content {
-    height: 100%;
+.border {
     border: #999 1px solid;
 }
-.remove-icon {
-    position: absolute;
-    right: -5px;
-    top: -5px;
-    font-size: 20px;
-    cursor: pointer;
+
+#content {
+    min-height: 100%;
+    color: #ffffff;
+}
+
+
+.resize-icon {
+    font-size: 10px;
     color: var(--text-color);
 }
-.resize-icon {
-    color: var(--text-color);
-    font-size: 10px;
+.remove-icon {
+    display: none;
+    position: absolute;
+    top: 17px;
+    right: 3px;
+    &:hover {
+        color: var(--text-color);
+    }
 }
 .no-data {
-    color: rgba($color: #ffffff, $alpha: 0.3);
+    color: rgba($color: #999, $alpha: 0.3);
     font-size: 40px;
     letter-spacing: .5em;
 }
@@ -418,16 +434,31 @@ export default {
 
 <style lang="scss">
 .vue-grid-item {
-    background-color: #272e43;
-    padding: 20px;
+    background-color: var(--contain-bg-color);
+    padding: 15px 20px 20px;
     border-radius: 8px;
-}
-.vue-grid-item.vue-grid-placeholder {
-    background: #fff !important;
-}
-.vue-grid-item > .vue-resizable-handle {
-    background: none;
-    padding: 3px 0 0 0;
-    transform: rotate(270deg);
+    &.vue-grid-placeholder {
+        background: #ffffff !important;
+    }
+    & > .vue-resizable-handle {
+        background: none;
+        padding: 3px 0 0 0;
+        transform: rotate(270deg);
+    }
+    &:hover .operate-icon,
+    &:hover .remove-icon {
+        display: block;
+    }
+
+    
+    &.contain-full-screen {
+        width: 100% !important;
+        height: 100% !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        z-index: 9999 !important;
+        transform: none !important;
+    }
 }
 </style>

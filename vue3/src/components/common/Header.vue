@@ -28,6 +28,7 @@ export default {
     border-radius: 50%;
     font-size: 18px;
     line-height: 1;
+    color: #fff;
     background-color: var(--bg-color);
 }
 </style>

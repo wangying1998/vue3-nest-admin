@@ -6,11 +6,32 @@
     font-size: 14px;
     /* 火狐滚动条样式 */
     scrollbar-width: thin;
-    scrollbar-color:  #DDDEE0 transparent;
+    scrollbar-color:  rgba(100, 100, 100, 0.05) transparent;
     -ms-overflow-style:none;
 
-    --text-color: #F04969;
-    --bg-color: #FF2183;
+    --text-color: #f04969;
+    --bg-color: #f04969;
+    --contain-bg-color: #272e43;
+
+    
+    /* #272E49 */
+    /* #4A71B4 */
+    /* #A1B6DF */
+    /* #E4DA4A */
+    /* #E28F25 */
+    /* #FABA69 */
+
+    /* #72A8CE */
+    /* #87C6D9 */
+    /* #9B87C8 */
+    /* #FDBF9B */
+    /* #EE8F88 */
+
+    /* #4373B0 */
+    /* #99B2EB */
+    
+    /* #5F83CB */
+    /* #E5D937 */
 }
 
 .icon-box {
@@ -30,10 +51,10 @@
 ::-webkit-scrollbar-thumb {
     width: 6px;
     border-radius: 6px;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(100, 100, 100, 0.05);
 }
 ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(100, 100, 100, 0.1);
 }
 ::-webkit-scrollbar-track {
     width: 6px;
@@ -62,6 +83,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+.fl-sta-bet {
+    display: flex;
+    justify-content: flex-start;
+    align-items: space-between;
 }
 .fl-row-reverse {
     flex-direction: row-reverse;
@@ -108,4 +134,9 @@ ul {
 /* radius */
 .radius-8 {
     border-radius: 8px;
+}
+
+/* overflow */
+.ov-auto {
+    overflow: auto;
 }

@@ -27,7 +27,8 @@
                     <el-link
                         type="primary"
                         :underline="false"
-                        v-for="item in operateList"
+                        v-for="(item, index) in operateList"
+                        :key="index"
                         @click="opreateHandle(item, scope.row)"
                         >{{ operateButtons[item] }}</el-link
                     >
@@ -38,7 +39,7 @@
 </template>
 
 <script>
-import tableOprateButtons from "@/tools/tableOprateButtons";
+import tableOprateButtons from "./tableOprateButtons";
 export default {
     emits: ["operate"],
     props: {

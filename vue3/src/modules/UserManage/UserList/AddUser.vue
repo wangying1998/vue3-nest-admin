@@ -51,12 +51,12 @@
             </el-form>
             <template #footer>
                 <span>
-                    <el-button type="primary" plain @click="visible = false"
-                        >取消</el-button
-                    >
-                    <el-button type="primary" @click="submitHandle"
-                        >确认</el-button
-                    >
+                    <el-button type="primary" plain @click="visible = false">
+                        取消
+                    </el-button>
+                    <el-button type="primary" @click="submitHandle">
+                        确认
+                    </el-button>
                 </span>
             </template>
         </el-dialog>
@@ -64,33 +64,33 @@
 </template>
 
 <script>
-import { ref, reactive, nextTick, toRaw, inject } from "vue";
-import { addUserApi, updateUserApi } from "../../../api/user.api";
+import { ref, reactive, nextTick, toRaw, inject } from 'vue';
+import { addUserApi, updateUserApi } from '../../../api/user.api';
 export default {
-    emits: ["refresh"],
+    emits: ['refresh'],
     setup(props, { emit, expose }) {
-        const $msg = inject("globalMsg");
+        const $msg = inject('globalMsg');
         let visible = ref(false);
-        let title = ref("");
+        let title = ref('');
         let isEdit = ref(false);
-        let sexList = ["男", "女"];
+        let sexList = ['男', '女'];
         let form = reactive({
-            uid: "",
-            name: "",
-            sex: "男",
+            uid: '',
+            name: '',
+            sex: '男',
             age: 18,
-            mobile: "",
-            email: "",
+            mobile: '',
+            email: '',
         });
         let rules = reactive({
-            uid: [{ required: true, message: "请输入UID", trigger: "blur" }],
-            name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
-            sex: [{ required: true, message: "请选择性别", trigger: "change" }],
-            age: [{ required: true, message: "请输入年龄", trigger: "blur" }],
+            uid: [{ required: true, message: '请输入UID', trigger: 'blur' }],
+            name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+            sex: [{ required: true, message: '请选择性别', trigger: 'change' }],
+            age: [{ required: true, message: '请输入年龄', trigger: 'blur' }],
             mobile: [
-                { required: true, message: "请输入手机号", trigger: "blur" },
+                { required: true, message: '请输入手机号', trigger: 'blur' },
             ],
-            email: [{ required: true, message: "请输入邮箱", trigger: "blur" }],
+            email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
         });
         let formRef = ref();
 
@@ -100,11 +100,11 @@ export default {
                 formRef.value.resetFields();
                 if (data) {
                     isEdit.value = true;
-                    title.value = "编辑用户";
+                    title.value = '编辑用户';
                     form = Object.assign(form, data);
                 } else {
                     isEdit.value = false;
-                    title.value = "创建用户";
+                    title.value = '创建用户';
                 }
             });
         };
@@ -118,7 +118,7 @@ export default {
                         addSubmit();
                     }
                 } else {
-                    console.log('字段校验出错', fields)
+                    console.log('字段校验出错', fields);
                     // return false;
                 }
             });
@@ -127,8 +127,8 @@ export default {
         const addSubmit = () => {
             addUserApi(toRaw(form))
                 .then((res) => {
-                    emit("refresh");
-                    $msg.message("success", "创建成功！");
+                    emit('refresh');
+                    $msg.message('success', '创建成功！');
                 })
                 .finally(() => {
                     visible.value = false;
@@ -138,8 +138,8 @@ export default {
         const updateSubmit = () => {
             updateUserApi(toRaw(form))
                 .then((res) => {
-                    emit("refresh");
-                    $msg.message("success", "编辑成功！");
+                    emit('refresh');
+                    $msg.message('success', '编辑成功！');
                 })
                 .finally(() => {
                     visible.value = false;

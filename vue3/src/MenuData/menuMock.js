@@ -1,4 +1,4 @@
-import menu from '@/tools/menu';
+import menu from './menu';
 
 const menuList = menu;
 
