@@ -2,10 +2,10 @@
     <div class="fl-bet-cen title-contain">
         <div class="chart-title">{{ title }}</div>
         <div class="fl-sta-cen operate-icon">
-            <i class="iconfont icon-w_bianji" @click="operateHandle('edit')"></i>
+            <i class="iconfont icon-edit" @click="operateHandle('edit')"></i>
             <i class="iconfont icon-shuaxin" @click="operateHandle('refresh')"></i>
-            <i v-show="nodeData.isFullScreen" class="iconfont icon-quxiaoquanping_o" @click="operateHandle('closefullScreen')"></i>
-            <i v-show="!nodeData.isFullScreen" class="iconfont icon-quanping_o" @click="operateHandle('fullScreen')"></i>
+            <i v-show="nodeData.isFullScreen" class="iconfont icon-quxiaoquanping" @click="operateHandle('closefullScreen')"></i>
+            <i v-show="!nodeData.isFullScreen" class="iconfont icon-quanping" @click="operateHandle('fullScreen')"></i>
         </div>
     </div>
 </template>

@@ -1,9 +1,6 @@
 <template>
     <div>
         <el-menu
-            background-color="#272E43"
-            text-color="#FFFFFF"
-            active-text-color="#F04969"
             :default-active="activeNav"
             @select="navChange"
         >

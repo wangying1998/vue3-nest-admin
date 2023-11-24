@@ -1,10 +1,10 @@
-import chartColors from '@/config/chartColors';
+import { DefaultColors } from '@/config/chartColors';
 /**
  * 表格配置
  */
 export default function useChartOption() {
     let defaultOptions = {
-        color: chartColors,
+        color: DefaultColors,
     };
 
     const generateChartConfig = function (chartOption) {
@@ -131,7 +131,7 @@ export default function useChartOption() {
                       show: true,
                       position: 'right',
                       distance: 10,
-                      color: '#fff',
+                      color: '#121212',
                       backgroundColor: 'transparent',
                   },
             grid: {
@@ -200,7 +200,7 @@ export default function useChartOption() {
                 pageIconSize: 11,
                 pageButtonItemGap: 0,
                 textStyle: {
-                    color: '#fff',
+                    color: '#121212',
                     fontSize: 13,
                 },
             },
@@ -216,7 +216,7 @@ export default function useChartOption() {
                 label: {
                     show: false,
                     position: 'center',
-                    color: '#fff',
+                    color: '#121212',
                     backgroundColor: 'transparent',
                 },
                 emphasis: {

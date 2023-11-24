@@ -27,7 +27,9 @@
         </el-row>
         <el-row class="mr-t-20">
             <el-col :span="24" :offset="0">
-                <Table :data="tableData" :columns="columns"></Table>
+                <div class="chart-box">
+                    <Table :data="tableData" :columns="columns"></Table>
+                </div>
             </el-col>
         </el-row>
         <el-row :gutter="20" class="mr-t-20">
@@ -221,8 +223,8 @@ export default {
 
 <style lang="scss" scoped>
 .chart-box {
-    color: #fff;
     background-color: var(--contain-bg-color);
+    box-shadow: 0 0 10px rgba(95, 131, 203, 0.3);
     border-radius: 8px;
     padding: 15px;
 }

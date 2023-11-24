@@ -1,0 +1,11 @@
+// 定义一个 mixin，传入 $property 和 $value 参数，并生成对应的样式
+@mixin generate-directional-margin($property, $value) {
+    #{$property}: $value;
+}
+
+// 使用 @each 循环生成具体的类名及样式
+@each $direction, $abbrev in (top: t, right: r, bottom: b, left: l) {
+    .m#{$abbrev}-#{$direction}($value: 10) {
+        @include generate-directional-margin(margin-#{$direction}, $value + px);
+    }
+}

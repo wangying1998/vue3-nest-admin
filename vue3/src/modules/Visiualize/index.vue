@@ -8,20 +8,20 @@
             @update:data="updateData"
             @edit:element="editHandle"
         ></Layout>
-        <UpdateModule ref="updateModule"/>
+        <ConfigModule ref="configModule"/>
     </div>
 </template>
 
 <script>
 import { ref } from 'vue';
 import Layout from '@/components/Layout/Layout.vue';
-import chartTypes from '../../config/chartTypes';
-import UpdateModule from './UpdateModule.vue';
+import { TypeList, DefaultOption } from '../../config/chartTypes';
+import ConfigModule from './ConfigModule/index.vue';
 
 export default {
     components: {
         Layout,
-        UpdateModule,
+        ConfigModule,
     },
     setup() {
         let data = ref([]);
@@ -140,10 +140,10 @@ export default {
 
         let dragElementList = ref([]);
 
-        dragElementList.value = chartTypes.typeList.map(item => {
+        dragElementList.value = TypeList.map(item => {
             return {
                 ...item,
-                ...chartTypes.defaultOption
+                ...DefaultOption
             }
         })
 
@@ -151,14 +151,14 @@ export default {
             data.value = result;
         };
         
-        let updateModule = ref();
+        let configModule = ref();
         const editHandle = function(data) {
             console.log(123, data)
         };
         return {
             data,
             dragElementList,
-            updateModule,
+            configModule,
 
             updateData,
             editHandle,

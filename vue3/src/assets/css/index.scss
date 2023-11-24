@@ -4,7 +4,7 @@
     // do not use same name, it will override.
     $colors: (
         "primary": (
-            "base": #ff2183,
+            "base": #f04969,
         ),
         // "success": (
         //     "base": #21ba45,
@@ -22,48 +22,7 @@
         //     "base": #42b8dd,
         // )
     ),
-    $fill-color: (
-        // "blank": #272E43,
-    ),
-    $bg-color: (
-
-    ),
-    $border-color: (
-        'lighter': #3D4356,
-    ),
-    $text-color: (
-        // 'regular': #606266,
-    ),
-    $overlay-color: (
-        
-    ),
-    $table: (
-        'bg-color': #272E43,
-        'tr-bg-color': #272E43,
-        'row-hover-bg-color': #1b2339,
-        'header-bg-color': #3D4356,
-        'header-text-color': #ffffff,
-        'text-color': #ffffff,
-    ),
-    $button: (
-    ),
-    $input: (
-        'bg-color': #fff,
-        'border-color': #dcdfe6,
-    ),
-    $checkbox: (
-        // 'bg-color': #dcdfe6,
-        // 'border-color': #dcdfe6,
-        // 'disabled-input-fill': #272E43,
-    ),
-    $radio: (
-        'input-bg-color': #fff
-    ),
-    $tree: (
-        'text-color': #FFFFFF,
-        'node-hover-bg-color': #1b2339,
-    ),
-    $button-padding-horizontal: ("default": 50px)
+    // $button-padding-horizontal: ("default": 50px)
 );
 
 // if you want to import all

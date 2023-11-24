@@ -1,27 +1,42 @@
-const typeList = [
+const TypeList = [
     {
         label: '柱状图',
         type: 'bar',
-        icon: 'icon-zhuzhuangtu-',
+        icon: 'icon-zhuzhuangtu',
+    },
+    {
+        label: '水平柱状图',
+        type: 'xbar',
+        icon: 'icon-tiaoxingtu',
     },
     {
         label: '趋势图',
         type: 'line',
-        icon: 'icon-zhexiantu-',
+        icon: 'icon-zhexiantu',
+    },
+    {
+        label: '环形图',
+        type: 'pie',
+        icon: 'icon-huanxingtu',
     },
     {
         label: '饼状图',
         type: 'pie',
-        icon: 'icon-huanxingtu-',
+        icon: 'icon-bingzhuangtu',
     },
     {
-        label: '横向柱状图',
-        type: 'xbar',
-        icon: 'icon-huanxingtu-',
+        label: '数据表',
+        type: 'tabel',
+        icon: 'icon-shujubiao',
+    },
+    {
+        label: '列表',
+        type: 'list',
+        icon: 'icon-liebiao',
     },
 ];
 
-const defaultOption = {
+const DefaultOption = {
     chartHeight: 170,
     title: '',
     options: {
@@ -46,7 +61,7 @@ const defaultOption = {
     }
 };
 
-export default {
-    typeList,
-    defaultOption
+export {
+    TypeList,
+    DefaultOption
 };

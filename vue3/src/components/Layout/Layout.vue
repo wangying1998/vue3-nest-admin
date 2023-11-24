@@ -64,7 +64,7 @@
                             <i class="resize-icon iconfont icon-zhijiao"></i>
                         </span>
                         <i
-                            class="remove-icon iconfont icon-shanchu cursor"
+                            class="remove-icon iconfont icon-delete cursor"
                             @click="removeHandle(index)"
                         ></i>
                     </grid-item>
@@ -394,8 +394,8 @@ export default {
         height: 50px;
         padding: 10px;
         margin-top: 10px;
-        background-color: #fff;
         color: #121212;
+        box-shadow: 2px 2px 5px rgba(95, 131, 203, 0.3);
     }
     .icon-box {
         width: 28px;
@@ -408,7 +408,7 @@ export default {
 
 #content {
     min-height: 100%;
-    color: #ffffff;
+    color: #121212;
 }
 
 
@@ -435,10 +435,11 @@ export default {
 <style lang="scss">
 .vue-grid-item {
     background-color: var(--contain-bg-color);
+    box-shadow: 0 0 10px rgba(95, 131, 203, 0.3);
     padding: 15px 20px 20px;
     border-radius: 8px;
     &.vue-grid-placeholder {
-        background: #ffffff !important;
+        background: #5F83CB !important;
     }
     & > .vue-resizable-handle {
         background: none;
