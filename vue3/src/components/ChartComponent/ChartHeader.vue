@@ -1,11 +1,28 @@
 <template>
     <div class="fl-bet-cen title-contain">
-        <div class="chart-title">{{ title }}</div>
+        <div class="chart-title fl-item" v-show="showTitle" :style="{
+            'font-size': fontSize + 'px',
+            'color': titleColor
+        }">
+            {{ title }}
+        </div>
+        <div class="fl-item" v-show="!showTitle"></div>
         <div class="fl-sta-cen operate-icon">
             <i class="iconfont icon-edit" @click="operateHandle('edit')"></i>
-            <i class="iconfont icon-shuaxin" @click="operateHandle('refresh')"></i>
-            <i v-show="nodeData.isFullScreen" class="iconfont icon-quxiaoquanping" @click="operateHandle('closefullScreen')"></i>
-            <i v-show="!nodeData.isFullScreen" class="iconfont icon-quanping" @click="operateHandle('fullScreen')"></i>
+            <i
+                class="iconfont icon-shuaxin"
+                @click="operateHandle('refresh')"
+            ></i>
+            <i
+                v-show="nodeData.isFullScreen"
+                class="iconfont icon-quxiaoquanping"
+                @click="operateHandle('closefullScreen')"
+            ></i>
+            <i
+                v-show="!nodeData.isFullScreen"
+                class="iconfont icon-quanping"
+                @click="operateHandle('fullScreen')"
+            ></i>
         </div>
     </div>
 </template>
@@ -15,7 +32,21 @@ export default {
     props: {
         title: {
             type: String,
-            default: '',
+            default: '标题',
+        },
+        // 文字颜色
+        titleColor: {
+            type: String,
+            default: '#121212',
+        },
+        // 文字字号
+        fontSize: {
+            type: Number,
+            default: 14,
+        },
+        showTitle: {
+            type: Boolean,
+            default: true,
         },
         nodeData: {
             type: Object,
@@ -23,7 +54,7 @@ export default {
         },
         layoutData: {
             type: Object,
-            default: () => ({})
+            default: () => ({}),
         },
     },
     setup(props, { emit }) {
@@ -61,6 +92,7 @@ export default {
     height: 23px;
     line-height: 23px;
     overflow: hidden;
+
     .chart-title {
         &::before {
             content: '';
@@ -72,10 +104,12 @@ export default {
             background-color: var(--bg-color);
         }
     }
+
     .operate-icon {
         cursor: pointer;
         letter-spacing: 3px;
         display: none;
+
         i:hover {
             color: var(--text-color);
         }

@@ -38,7 +38,13 @@ const TypeList = [
 
 const DefaultOption = {
     chartHeight: 170,
-    title: '',
+    theme: 'default',
+    titleOptions: {
+        title: '趋势图',
+        showTitle: true,
+        fontSize: 14,
+        titleColor: '#121212',
+    },
     options: {
         axis: [
             '2000-06-05',

@@ -1,44 +1,35 @@
 <template>
     <div class="edit-container fl-sta-bet fl-col">
-        <!-- <el-collapse v-model="activeNames" :accordion="false">
-            <el-collapse-item title="标题" name="titleConfig">
-                <TitleConfig />
-            </el-collapse-item>
-        </el-collapse> -->
-
         <div class="section-title">图表</div>
-        <ChartConfig />
+        <ChartConfig :active-module="activeModule" />
         <div class="section-title">标题</div>
-        <TitleConfig />
+        <TitleConfig :active-module="activeModule" />
         <div class="section-title">颜色</div>
-        <ColorConfig />
+        <ColorConfig :active-module="activeModule" />
     </div>
 </template>
 
 <script>
 import { ref } from 'vue';
-import TitleConfig from './TitleConfig.vue';
 import ChartConfig from './ChartConfig.vue';
+import TitleConfig from './TitleConfig.vue';
 import ColorConfig from './ColorConfig.vue';
 
 export default {
     components: {
-        TitleConfig,
         ChartConfig,
+        TitleConfig,
         ColorConfig,
     },
-    setup() {
-        let activeNames = ref(['titleConfig']);
-        let collapseList = [
-            {
-                id: 'titleConfig',
-                title: '标题',
-            }
-        ]
-
+    props: {
+        activeModule: {
+            type: Object,
+            default: () => ({})
+        }
+    },
+    setup(props) {
         return {
-            activeNames,
-            collapseList,
+            props,
         };
     },
 };

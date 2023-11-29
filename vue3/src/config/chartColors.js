@@ -1,20 +1,8 @@
-const DefaultColors = [
-    '#2F7BC8',
-    '#6FA3E1',
-    '#98B8EC',
-    '#C2CCE5',
-    '#E6D4D0',
-    '#F4C17A',
-    '#F8DD34',
-    '#F9B41A',
-    '#FA8E07',
-    '#FC7200',
-];
-
 const ChartColors = [
     {
-        label: '默认',
+        label: '蔚蓝渐变',
         theme: 'default',
+        // theme: 'azure',
         // color: ['#2F7BC8', '#98B8EC', '#F8DD34', '#FA8E07'],
         color: [
             '#2F7BC8',
@@ -30,8 +18,8 @@ const ChartColors = [
         ],
     },
     {
-        label: '方案 1',
-        theme: 'plan 1',
+        label: '经典自然',
+        theme: 'classic',
         color: [
             '#c23531',
             '#2f4554',
@@ -46,8 +34,8 @@ const ChartColors = [
         ],
     },
     {
-        label: '方案 2',
-        theme: 'plan 2',
+        label: '鲜艳调色板',
+        theme: 'vibrant',
         color: [
             '#003366',
             '#dc143c',
@@ -62,8 +50,8 @@ const ChartColors = [
         ],
     },
     {
-        label: '方案 3',
-        theme: 'plan 3',
+        label: '莫兰迪',
+        theme: 'mauvelous',
         color: [
             '#9b8bba',
             '#e098c7',
@@ -78,8 +66,8 @@ const ChartColors = [
         ],
     },
     {
-        label: '方案 4',
-        theme: 'plan 4',
+        label: '鲜艳蓝紫',
+        theme: 'blue-purple',
         color: [
             '#f44336',
             '#e91e63',
@@ -94,8 +82,8 @@ const ChartColors = [
         ],
     },
     {
-        label: '方案 5',
-        theme: 'plan 5',
+        label: '温和灰粽',
+        theme: 'grey-brown',
         color: [
             '#ff5722',
             '#795548',
@@ -110,8 +98,8 @@ const ChartColors = [
         ],
     },
     {
-        label: '方案 6',
-        theme: 'plan 6',
+        label: '活力明亮',
+        theme: 'bright',
         color: [
             '#f9d5b7',
             '#ee4035',
@@ -126,8 +114,8 @@ const ChartColors = [
         ],
     },
     {
-        label: '方案 7',
-        theme: 'plan 7',
+        label: '日落海洋',
+        theme: 'sunset-ocean',
         color: [
             '#d73027',
             '#fc8d59',
@@ -142,8 +130,8 @@ const ChartColors = [
         ],
     },
     {
-        label: '方案 8',
-        theme: 'plan 8',
+        label: '海洋蓝系',
+        theme: 'ocean-blue',
         color: [
             '#f7fbff',
             '#deebf7',
@@ -158,8 +146,8 @@ const ChartColors = [
         ],
     },
     {
-        label: '方案 9',
-        theme: 'plan 9',
+        label: '秋日暖调',
+        theme: 'autumn-warm',
         color: [
             '#f0d1a7',
             '#e87c25',
@@ -174,8 +162,8 @@ const ChartColors = [
         ],
     },
     {
-        label: '方案 10',
-        theme: 'plan 10',
+        label: '粉红褐调',
+        theme: 'pink-brown',
         color: [
             '#3e0317',
             '#e63b4d',
@@ -192,6 +180,5 @@ const ChartColors = [
 ];
 
 export {
-    DefaultColors,
     ChartColors
 };

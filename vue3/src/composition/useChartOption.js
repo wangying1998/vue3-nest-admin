@@ -1,14 +1,18 @@
-import { DefaultColors } from '@/config/chartColors';
+import { ChartColors } from '@/config/chartColors';
 /**
  * 表格配置
  */
 export default function useChartOption() {
-    let defaultOptions = {
-        color: DefaultColors,
-    };
 
     const generateChartConfig = function (chartOption) {
         let type = chartOption.type;
+        let themeColor = ChartColors.find(item => item.theme === chartOption.theme);
+        console.log(111, chartOption)
+
+        let defaultOptions = {
+            color: themeColor.color,
+        };
+
         let customOption = {};
         if (type === 'line') {
             customOption = formatLine(chartOption);

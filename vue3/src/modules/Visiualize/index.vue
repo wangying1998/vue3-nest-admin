@@ -8,7 +8,7 @@
             @update:data="updateData"
             @edit:element="editHandle"
         ></Layout>
-        <ConfigModule ref="configModule"/>
+        <ConfigModule ref="configModule" :active-module="activeModule" />
     </div>
 </template>
 
@@ -34,7 +34,13 @@ export default {
                 i: '0',
                 chartHeight: 170,
                 type: 'line',
-                title: '趋势图',
+                theme: 'default',
+                titleOptions: {
+                    title: '趋势图',
+                    showTitle: true,
+                    fontSize: 14,
+                    titleColor: '#121212',
+                },
                 options: {
                     axis: [
                         '2000-06-05',
@@ -73,7 +79,13 @@ export default {
                 i: '1',
                 chartHeight: 170,
                 type: 'bar',
-                title: '柱状图',
+                theme: 'default',
+                titleOptions: {
+                    title: '柱状图',
+                    showTitle: true,
+                    fontSize: 14,
+                    titleColor: '#121212',
+                },
                 options: {
                     axis: [
                         "2000-06-05",
@@ -101,7 +113,13 @@ export default {
                 i: '2',
                 chartHeight: 170,
                 type: 'pie',
-                title: '饼图',
+                theme: 'default',
+                titleOptions: {
+                    title: '饼图',
+                    showTitle: true,
+                    fontSize: 14,
+                    titleColor: '#121212',
+                },
                 options: {
                     axis: ['测试数据', 'data1', 'data2', 'data3'],
                     series: [
@@ -119,7 +137,13 @@ export default {
                 i: '3',
                 chartHeight: 170,
                 type: 'xbar',
-                title: '横向柱状图',
+                theme: 'default',
+                titleOptions: {
+                    title: '横向柱状图',
+                    showTitle: true,
+                    fontSize: 14,
+                    titleColor: '#121212',
+                },
                 options: {
                     axis: [
                         "2000-06-05",
@@ -152,13 +176,18 @@ export default {
         };
         
         let configModule = ref();
+        // 编辑的数据模块
+        let activeModule = ref();
         const editHandle = function(data) {
             console.log(123, data)
+            activeModule.value = data;
         };
+
         return {
             data,
             dragElementList,
             configModule,
+            activeModule,
 
             updateData,
             editHandle,

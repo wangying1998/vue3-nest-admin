@@ -101,7 +101,13 @@
 import { ref } from 'vue';
 import { ChartColors } from '@/config/chartColors';
 export default {
-    setup() {
+    props: {
+        activeModule: {
+            type: Object,
+            default: () => ({})
+        }
+    },
+    setup(props) {
         let currColors = ref([]);
         currColors.value = [].concat(ChartColors[0].color);
         let activeTheme = ref('');

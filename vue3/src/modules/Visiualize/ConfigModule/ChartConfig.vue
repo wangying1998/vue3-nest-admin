@@ -1,26 +1,21 @@
 <template>
     <div>
-        <el-form
-            ref="chartForm"
-            :model="form"
-            :rules="rules"
-            label-width="80px"
-            class="fl-item"
-        >
+        <el-form ref="chartForm" :model="form" :rules="rules" label-width="80px" class="fl-item">
             <el-form-item label="图表类型">
                 <div class="full-width fl-bet-cen">
                     <div class="fl-sta-cen">
                         <svg class="icon-box" aria-hidden="true">
-                            <use :xlink:href="`#${form.icon}`"></use>
+                            <use :xlink:href="`#${currChartType.icon}`"></use>
                         </svg>
-                        <span class="mr-l-10">{{ form.label }}</span>
+                        <span class="mr-l-10">{{ currChartType.label }}</span>
                     </div>
-    
-                    <el-button type="text" @click="changeChartType">更换类型</el-button>
+
+                    <el-button type="text" @click="changeChartType">
+                        更换类型
+                    </el-button>
                 </div>
             </el-form-item>
             <!-- 对应类型的配置项 -->
-            
         </el-form>
 
         <ChartTypeDialog ref="chartTypeDialog" v-show="dialogVisible" @refresh="refreshHandle" />
@@ -28,7 +23,7 @@
 </template>
 
 <script>
-import { nextTick, ref } from 'vue';
+import { nextTick, ref, watch } from 'vue';
 
 import { TypeList } from '@/config/chartTypes';
 import ChartTypeDialog from './ChartTypeDialog.vue';
@@ -37,38 +32,55 @@ export default {
     components: {
         ChartTypeDialog,
     },
-    setup() {
+    props: {
+        activeModule: {
+            type: Object,
+            default: () => ({}),
+        },
+    },
+    setup(props) {
         let chartForm = ref();
-        let form = ref({
-            type: TypeList[0].type,
-            label: TypeList[0].label,
-            icon: TypeList[0].icon,
-        });
-
+        let form = ref({});
+        let currChartType = ref({});
+        
         let dialogVisible = ref(false);
         let chartTypeDialog = ref();
 
-        const changeChartType = function() {
+        const changeChartType = function () {
             dialogVisible.value = true;
             nextTick(() => {
                 chartTypeDialog.value.init();
-            })
-        }
-        
-        const refreshHandle = function(data) {
-            form.value.label = data.label;
-            form.value.type = data.type;
-            form.value.icon = data.icon;
-        }
+            });
+        };
+
+        const refreshHandle = function (data) {
+            currChartType.value = data;
+        };
+
+        const reshowConfig = function () {
+            let data = props.activeModule;
+
+        };
+
+        watch(
+            () => props.activeModule,
+            (val) => {
+                let item = TypeList.find(ele => ele.type === val.type);
+                currChartType.value = item;
+            },
+        );
+
         return {
             chartForm,
             form,
             TypeList,
             dialogVisible,
             chartTypeDialog,
+            currChartType,
 
             changeChartType,
             refreshHandle,
+            reshowConfig,
         };
     },
 };

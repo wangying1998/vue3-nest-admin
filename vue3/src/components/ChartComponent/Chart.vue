@@ -1,8 +1,10 @@
 <template>
     <div class="contain-box">
         <ChartHeader
-            :title="title"
-            v-show="headerShow"
+            :title="titleOptions.title"
+            :show-title="titleOptions.showTitle"
+            :title-color="titleOptions.titleColor"
+            :font-size="titleOptions.fontSize"
             :node-data="nodeData"
             @resize:element="resizeElement"
             @edit:element="editElement"
@@ -56,19 +58,19 @@ export default {
             default: '',
         },
         // 图表title
-        title: {
-            type: String,
-            default: 'Title',
+        titleOptions: {
+            type: Object,
+            default: () => ({
+                title: '标题',
+                showTitle: true,
+                fontSize: 14,
+                titleColor: '#121212',
+            }),
         },
         // 图表高度
         height: {
             type: Number,
             default: 240,
-        },
-        // 是否显示 表头信息
-        headerShow: {
-            type: Boolean,
-            default: true,
         },
         // 拖拽节点数据 grid-item
         nodeData: {
@@ -79,6 +81,11 @@ export default {
         chartType: {
             type: String,
             default: 'bar'
+        },
+        // 元素id
+        chartTheme: {
+            type: String,
+            default: 'default',
         },
         // 图表数据
         chartData: {
@@ -93,6 +100,7 @@ export default {
 
         let chartOptions = generateChartConfig({
             type: props.chartType,
+            theme: props.chartTheme,
             ...props.chartData
         });
 
