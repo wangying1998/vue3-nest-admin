@@ -1,18 +1,32 @@
-import { ChartColors } from '@/config/chartColors';
 /**
  * 表格配置
  */
+import { ChartColors } from '@/config/chartColors';
 export default function useChartOption() {
-
     const generateChartConfig = function (chartOption) {
-        let type = chartOption.type;
-        let themeColor = ChartColors.find(item => item.theme === chartOption.theme);
-        console.log(111, chartOption)
-
-        let defaultOptions = {
-            color: themeColor.color,
+        let color = [];
+        if(chartOption.color && chartOption.color.length) {
+            color = chartOption.color;
+        } else {
+            let themeColor = ChartColors.find(color => color.theme === chartOption.theme);
+            color = themeColor.color;
+        }
+        let defaultOption = {
+            title: {
+                show: chartOption.titleOptions.show,
+                text: chartOption.titleOptions.title,
+                padding: [3, 0],
+                textStyle: {
+                    fontSize: chartOption.titleOptions.fontSize,
+                    color: chartOption.titleOptions.color,
+                    fongFamily: '微软雅黑',
+                    fontWeight: 'normal',
+                }
+            },
+            color,
         };
 
+        let type = chartOption.type;
         let customOption = {};
         if (type === 'line') {
             customOption = formatLine(chartOption);
@@ -24,7 +38,8 @@ export default function useChartOption() {
             customOption = formatPie(chartOption);
         }
 
-        return Object.assign(defaultOptions, customOption);
+        // console.log('配置更新：', defaultOption, customOption)
+        return Object.assign(defaultOption, customOption);
     };
 
     /**
@@ -197,7 +212,7 @@ export default function useChartOption() {
             legend: {
                 type: 'scroll',
                 orient: 'vertical',
-                top: '0',
+                top: '20',
                 right: '0',
                 itemWidth: 6,
                 itemHeight: 6,

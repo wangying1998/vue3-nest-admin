@@ -21,9 +21,9 @@
         <div class="fl-item radius-8 border ov-auto">
             <div id="content">
                 <grid-layout
-                    v-show="data.length"
+                    v-show="chartStore.chartData.length"
                     ref="gridlayout"
-                    :layout="data"
+                    :layout="chartStore.chartData"
                     :col-num="colNum"
                     :row-height="rowHeight"
                     :is-draggable="isDraggable"
@@ -34,7 +34,7 @@
                     :use-css-transforms="useCssTransforms"
                 >
                     <grid-item
-                        v-for="(item, index) in data"
+                        v-for="(item, index) in chartStore.chartData"
                         :key="item.i"
                         :i="item.i"
                         :x="item.x"
@@ -43,34 +43,69 @@
                         :h="item.h"
                         :id="'contain-' + item.i"
                         :class="item.isFullScreen ? 'contain-full-screen' : ''"
-                        @resize="resizeEvent(item)"
-                        @resized="resizeEvent(item)"
-                        @moved="resizeEvent(item)"
-                        @container-resized="resizeEvent(item)"
+                        @resize="resizeHandle(index, item)"
+                        @resized="resizeHandle(index, item)"
                     >
-                        <div class="full-width" :is-full-screen="item.isFullScreen">
+                        <!-- @moved="resizeHandle(index, item)" -->
+                        <!-- @container-resized="resizeHandle(index, item)" -->
+                        <div
+                            class="full-width"
+                            :is-full-screen="item.isFullScreen"
+                        >
                             <Chart
+                                ref="chart"
                                 :node-data="item"
+                                :node-index="index"
                                 :dom-id="'chart-' + item.i"
                                 :height="item.chartHeight"
-                                :titleOptions="item.titleOptions"
+                                :title-options="item.titleOptions"
                                 :chart-type="item.type"
-                                :chart-theme="item.theme"
+                                :chart-color="item.color"
                                 :chart-data="item.options"
-                                @resize:element="resizeEvent"
-                                @edit:element="editEvent"
                             />
                         </div>
                         <span class="vue-resizable-handle">
                             <i class="resize-icon iconfont icon-zhijiao"></i>
                         </span>
-                        <i
-                            class="remove-icon iconfont icon-delete cursor"
-                            @click="removeHandle(index)"
-                        ></i>
+
+                        <div class="fl-sta-cen operate-icon">
+                            <i
+                                class="iconfont icon-edit"
+                                @click="operateHandle('edit', index, item)"
+                            ></i>
+                            <i
+                                class="iconfont icon-shuaxin"
+                                @click="operateHandle('refresh', index, item)"
+                            ></i>
+                            <i
+                                v-show="item.isFullScreen"
+                                class="iconfont icon-quxiaoquanping"
+                                @click="
+                                    operateHandle(
+                                        'closefullScreen',
+                                        index,
+                                        item,
+                                    )
+                                "
+                            ></i>
+                            <i
+                                v-show="!item.isFullScreen"
+                                class="iconfont icon-quanping"
+                                @click="
+                                    operateHandle('fullScreen', index, item)
+                                "
+                            ></i>
+                            <i
+                                class="iconfont icon-delete"
+                                @click="operateHandle('remove', index, item)"
+                            ></i>
+                        </div>
                     </grid-item>
                 </grid-layout>
-                <div v-show="!data.length" class="full-height fl-cen-cen no-data">
+                <div
+                    v-show="!chartStore.chartData.length"
+                    class="full-height fl-cen-cen no-data"
+                >
                     <!-- 拖拽左侧模块至此处 -->
                 </div>
             </div>
@@ -83,6 +118,8 @@ import { nextTick, onMounted, ref, watch } from 'vue';
 import { GridLayout, GridItem } from 'vue-grid-layout';
 import useCalcLayout from '@/composition/useCalcLayout.js';
 import Chart from '@/components/ChartComponent/Chart.vue';
+import { useChartStore } from '../../store/layout-chart';
+
 export default {
     components: {
         GridLayout,
@@ -90,10 +127,6 @@ export default {
         Chart,
     },
     props: {
-        data: {
-            type: Array,
-            default: () => [],
-        },
         dragElementList: {
             type: Array,
             default: () => [],
@@ -130,16 +163,19 @@ export default {
             calcXY,
         } = useCalcLayout();
 
+        let chartStore = useChartStore();
 
-        let layoutData = props.data;
+        let layoutData = chartStore.chartData;
         // 初始化各个元素的全屏状态为false
-        layoutData.forEach(layoutDatum => {
+        layoutData.forEach((layoutDatum) => {
             layoutDatum.isFullScreen = false;
-        })
+        });
 
         let mouseXY = { x: null, y: null };
         let DragPos = { x: null, y: null, w: 1, h: 1, i: null };
         const gridlayout = ref(null);
+
+        let chart = ref();
 
         onMounted(() => {
             // 全局增加 dragover 事件，便于获取鼠标位置
@@ -160,7 +196,7 @@ export default {
 
         /**
          * 拖拽事件，判断鼠标位置决定页面显示，计算新增元素位置
-         * @param {*} data 
+         * @param {*} data
          */
         const drag = function (data) {
             nextTick(() => {
@@ -190,7 +226,7 @@ export default {
                         w: defaultSize.w,
                         h: defaultSize.h,
                         i: 'drop',
-                        ...data
+                        ...data,
                     };
                     node.title = node.i;
                     layoutData.push(node);
@@ -248,7 +284,7 @@ export default {
                         layoutData = layoutData.filter(
                             (obj) => obj.i !== 'drop',
                         );
-                        emit('update:data', layoutData);
+                        chartStore.updateChartList(layoutData);
                     }
                 }
             });
@@ -256,7 +292,7 @@ export default {
 
         /**
          * 结束拖拽，将数据对象加入数据列表，并放置在所选位置
-         * @param {Object} data 新增数据对象 
+         * @param {Object} data 新增数据对象
          */
         const dragend = function (data) {
             nextTick(() => {
@@ -289,12 +325,12 @@ export default {
                         w: defaultSize.w,
                         h: defaultSize.h,
                         i: DragPos.i,
-                        ...data
+                        ...data,
                     };
                     node.title = node.i;
                     layoutData.push(node);
 
-                    emit('update:data', layoutData);
+                    chartStore.updateChartList(layoutData);
 
                     gridlayout.value.dragEvent(
                         'dragend',
@@ -327,41 +363,66 @@ export default {
          */
         const removeHandle = function (index) {
             layoutData.splice(index, 1);
-            // 更新父组件数据
-            emit('update:data', layoutData);
+            // 更新chart列表数据
+            chartStore.updateChartList(layoutData);
         };
-
-        /**
-         * watch
-         */
-        watch(
-            () => props.data,
-            (val) => {
-                layoutData = val;
-            },
-        );
 
         /**
          * grid-item resize
          * @param {Object} item 数据对象
          */
-        const resizeEvent = function (item) {
+        const resizeHandle = function (index, item) {
             let dom = document.querySelector('#contain-' + item.i);
             nextTick(() => {
-                item.chartHeight = dom.clientHeight - 60;
+                item.chartHeight = dom.clientHeight - 30;
+                refreshChart(index, item);
                 window.dispatchEvent(new Event('resize'));
             });
         };
 
-
-        const editEvent = function (data) {
-            emit('edit:element', data);
+        const operateHandle = function (operate, index, data) {
+            if (operate === 'edit') {
+                // data: 元素本身
+                emit('edit:chart', index, data);
+            } else if (operate === 'refresh') {
+                // data: 元素本身
+                chart.value[index].refreshHandle(index, data);
+            } else if (operate === 'fullScreen') {
+                // data: 元素本身
+                data.isFullScreen = true;
+                resizeHandle(index, data);
+            } else if (operate === 'closefullScreen') {
+                // data: 元素本身
+                data.isFullScreen = false;
+                resizeHandle(index, data);
+            } else if (operate === 'remove') {
+                removeHandle(index, data);
+            }
         };
-        
+
+        /**
+         * 对数据修改后，更新图表数据并更新视图
+         * @param {*} index 修改数据的下标
+         * @param {*} data 需要更新的数据
+         */
+        const refreshChart = function(index, data) {
+            updateModule(data);
+            chartStore.updateChartItem(index, data);
+            chart.value[index].refreshHandle(index, data);
+        };
+
+        const updateModule = function(data) {
+            emit('sync:data', data);
+        };
+
         return {
             props,
+            chartStore,
+
             gridlayout,
             layoutData,
+
+            chart,
 
             // useCalcLayout
             margin,
@@ -378,9 +439,11 @@ export default {
 
             drag,
             dragend,
-            resizeEvent,
-            editEvent,
+            resizeHandle,
             removeHandle,
+
+            operateHandle,
+            refreshChart,
         };
     },
 };
@@ -406,30 +469,30 @@ export default {
 .border {
     border: #999 1px solid;
 }
-
 #content {
     min-height: 100%;
     color: #121212;
 }
-
-
 .resize-icon {
     font-size: 10px;
     color: var(--text-color);
 }
-.remove-icon {
+.operate-icon {
     display: none;
     position: absolute;
-    top: 17px;
+    top: 10px;
     right: 3px;
-    &:hover {
+    letter-spacing: 3px;
+    cursor: pointer;
+
+    i:hover {
         color: var(--text-color);
     }
 }
 .no-data {
     color: rgba($color: #999, $alpha: 0.3);
     font-size: 40px;
-    letter-spacing: .5em;
+    letter-spacing: 0.5em;
 }
 </style>
 
@@ -437,10 +500,10 @@ export default {
 .vue-grid-item {
     background-color: var(--contain-bg-color);
     box-shadow: 0 0 10px rgba(95, 131, 203, 0.3);
-    padding: 15px 20px 20px;
+    padding: 15px;
     border-radius: 8px;
     &.vue-grid-placeholder {
-        background: #5F83CB !important;
+        background: #5f83cb !important;
     }
     & > .vue-resizable-handle {
         background: none;
@@ -452,7 +515,6 @@ export default {
         display: block;
     }
 
-    
     &.contain-full-screen {
         width: 100% !important;
         height: 100% !important;

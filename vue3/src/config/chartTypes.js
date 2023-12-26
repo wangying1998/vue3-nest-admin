@@ -37,7 +37,7 @@ const TypeList = [
 ];
 
 const DefaultOption = {
-    chartHeight: 170,
+    chartHeight: 200,
     theme: 'default',
     titleOptions: {
         title: '趋势图',

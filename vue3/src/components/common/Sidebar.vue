@@ -9,7 +9,6 @@
 
 <script>
 import { useRouter } from "vue-router";
-import { useStore } from "vuex";
 import SubMenu from "./SubMenu.vue";
 
 export default {
@@ -17,7 +16,6 @@ export default {
     //     SubMenu,
     // },
     setup() {
-        const store = useStore();
         const router = useRouter();
         const goPage = (name) => {
             router.push({

@@ -9,5 +9,5 @@
 
 <style>
 @import url('./assets/css/common.css');
-@import url('//at.alicdn.com/t/c/font_4301192_0tgknz51o47.css');
+@import url('//at.alicdn.com/t/c/font_4301192_zexrgk5lj5n.css');
 </style>

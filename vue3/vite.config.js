@@ -5,6 +5,7 @@ import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import ElementPlus from 'unplugin-element-plus/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+import globalConfig from './globalConfig';
 
 export default defineConfig(({ command, mode }) => {
     return {
@@ -19,7 +20,7 @@ export default defineConfig(({ command, mode }) => {
             // host: '0.0.0.0',
             proxy: {
                 '^/api': {
-                    target: 'http://localhost:8083/'
+                    target: globalConfig[mode].target,
                 }
             },
         },

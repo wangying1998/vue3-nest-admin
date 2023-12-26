@@ -1,16 +1,15 @@
-import { createStore } from 'vuex';
-
+import { defineStore } from 'pinia';
 import menuList from '../MenuData/menuMock';
 
 // 创建一个新的 store 实例
-const store = createStore({
-    state () {
+export const useMenuStore = defineStore('menu', {
+    state: () => {
         return {
             menuList: menuList,
             activeMenu: 'DashBoard',
         }
     },
-    mutations: {
+    actions: {
         setMenuList(state, data) {
             // this.menuList = data;
             state.menuList = menuList;
@@ -20,5 +19,3 @@ const store = createStore({
         }
     }
 })
-
-export default store;

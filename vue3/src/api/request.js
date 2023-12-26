@@ -1,5 +1,5 @@
 import axios from 'axios';
-import config from '@/config/index';
+import config from './index';
 import { ElMessage } from 'element-plus';
 // import { requestConfigStore } from '@/store/requestConfig.js';
 // import { storeToRefs } from 'pinia';
@@ -43,7 +43,7 @@ import { ElMessage } from 'element-plus';
 
 // 创建axios
 const service = axios.create({
-    baseURL: config[import.meta.env.MODE].VITE_BASE_API_URL,
+    baseURL: config[import.meta.env.MODE].baseUrl,
     timeout: 120000,
 });
 

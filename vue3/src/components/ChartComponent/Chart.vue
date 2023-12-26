@@ -1,14 +1,16 @@
 <template>
     <div class="contain-box">
-        <ChartHeader
-            :title="titleOptions.title"
-            :show-title="titleOptions.showTitle"
-            :title-color="titleOptions.titleColor"
-            :font-size="titleOptions.fontSize"
+        <!-- :title="titleOptions.title"
+        :show-title="titleOptions.show"
+        :title-color="titleOptions.color"
+        :font-size="titleOptions.fontSize" -->
+        <!-- <ChartHeader
             :node-data="nodeData"
-            @resize:element="resizeElement"
-            @edit:element="editElement"
-        />
+            :node-index="nodeIndex"
+            @resize="resizeHandle"
+            @edit="editHandle"
+            @refresh="refreshHandle"
+        /> -->
         <div
             :id="domId"
             :style="{ width: '100%', height: height + 'px' }"
@@ -31,8 +33,9 @@ import {
 } from 'echarts/components';
 import { LabelLayout, UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
-import { onMounted, onUnmounted, } from 'vue';
+import { nextTick, onMounted, onUnmounted } from 'vue';
 import useChartOption from '../../composition/useChartOption.js';
+import { useChartStore } from '../../store/layout-chart';
 
 echarts.use([
     TitleComponent,
@@ -62,9 +65,9 @@ export default {
             type: Object,
             default: () => ({
                 title: '标题',
-                showTitle: true,
+                show: true,
                 fontSize: 14,
-                titleColor: '#121212',
+                color: '#121212',
             }),
         },
         // 图表高度
@@ -72,37 +75,42 @@ export default {
             type: Number,
             default: 240,
         },
-        // 拖拽节点数据 grid-item
-        nodeData: {
-            type: Object,
-            default: () => ({}),
-        },
         // 图表类型
         chartType: {
             type: String,
             default: 'bar'
         },
-        // 元素id
+        // 图表主题
         chartTheme: {
             type: String,
-            default: 'default',
+            default: ''
+        },
+        // 图表颜色
+        chartColor: {
+            type: Array,
+            default: []
         },
         // 图表数据
         chartData: {
             type: Object,
             default: () => ({}),
         },
+        // layout 节点数据
+        nodeData: {
+            type: Object,
+            default: () => ({}),
+        },
+        // layout 节点下标
+        nodeIndex: {
+            type: Number,
+            default: 0,
+        },
     },
     setup(props, { emit }) {
         let chart = null;
+        let chartStore = useChartStore();
         
         let { generateChartConfig } = useChartOption();
-
-        let chartOptions = generateChartConfig({
-            type: props.chartType,
-            theme: props.chartTheme,
-            ...props.chartData
-        });
 
         /**
          * 初始化画布
@@ -114,9 +122,14 @@ export default {
         /**
          * 绘制图表
          */
-        const draw = () => {
-            chart = echarts.init(document.getElementById(props.domId));
-            chart.setOption(chartOptions);
+        const draw = (domId, options) => {
+            initChart();
+            nextTick(() => {
+                if(!chart) {
+                    chart = echarts.init(document.getElementById(domId));
+                }
+                chart.setOption(options, true);
+            })
         };
 
         /**
@@ -128,17 +141,50 @@ export default {
             }, 0);
         };
 
-        const resizeElement = function (data) {
-            emit('resize:element', data);
+        /**
+         * 全屏/非全屏
+         * @param {*} index 
+         * @param {*} data 
+         */
+        const resizeHandle = function (index, data) {
+            emit('resize:chart', index, data);
         };
 
-        const editElement = function (data) {
-            emit('edit:element', data);
+        /**
+         * 编辑按钮
+         * @param {*} index 
+         * @param {*} data 
+         */
+        const editHandle = function (index, data) {
+            emit('edit:chart', index, data);
+        };
+
+        /**
+         * 点击刷新/更新配置后需要触发刷新
+         * @param {*} index 
+         * @param {*} data 
+         */
+        const refreshHandle = function (index, data) {
+            let option = generateChartConfig({
+                type: data.type,
+                color: data.color,
+                theme: data.theme,
+                titleOptions: data.titleOptions,
+                ...data.options
+            });
+            draw('chart-' + data.i, option);
         };
 
         onMounted(() => {
-            initChart();
-            draw();
+            let chartOptions = generateChartConfig({
+                type: props.chartType,
+                color: props.chartColor,
+                theme: props.chartTheme,
+                titleOptions: props.titleOptions,
+                ...props.chartData
+            });
+            draw(props.domId, chartOptions);
+
             window.addEventListener('resize', resize, null, false);
         });
 
@@ -148,9 +194,12 @@ export default {
 
         return {
             props,
+            chartStore,
+
             resize,
-            resizeElement,
-            editElement,
+            resizeHandle,
+            editHandle,
+            refreshHandle,
         };
     },
 };

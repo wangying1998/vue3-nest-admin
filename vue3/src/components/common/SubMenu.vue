@@ -26,17 +26,18 @@
 <script>
 import { computed, ref, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useStore } from "vuex";
+import { useMenuStore } from "../../store/menu";
 
 export default {
     name: "SubMenu",
     setup() {
-        const store = useStore();
         const router = useRouter();
         const route = useRoute();
 
-        let activeNav = computed(() => store.state.activeMenu);
-        let menuList = computed(() => store.state.menuList);
+        let menuStore = useMenuStore();
+
+        let activeNav = computed(() => menuStore.activeMenu);
+        let menuList = computed(() => menuStore.menuList);
 
         watchEffect(() => {
             activeNav = route.name;

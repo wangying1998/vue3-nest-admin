@@ -1,12 +1,12 @@
 <template>
-    <div class="fl-bet-cen title-contain">
+    <div class="fl-sta-cen fl-row-reverse full-width title-contain">
         <div class="chart-title fl-item" v-show="showTitle" :style="{
             'font-size': fontSize + 'px',
             'color': titleColor
         }">
             {{ title }}
         </div>
-        <div class="fl-item" v-show="!showTitle"></div>
+        <!-- <div class="fl-item"></div> -->
         <div class="fl-sta-cen operate-icon">
             <i class="iconfont icon-edit" @click="operateHandle('edit')"></i>
             <i
@@ -30,27 +30,31 @@
 <script>
 export default {
     props: {
-        title: {
-            type: String,
-            default: '标题',
-        },
-        // 文字颜色
-        titleColor: {
-            type: String,
-            default: '#121212',
-        },
-        // 文字字号
-        fontSize: {
-            type: Number,
-            default: 14,
-        },
-        showTitle: {
-            type: Boolean,
-            default: true,
-        },
+        // title: {
+        //     type: String,
+        //     default: '标题',
+        // },
+        // // 文字颜色
+        // titleColor: {
+        //     type: String,
+        //     default: '#121212',
+        // },
+        // // 文字字号
+        // fontSize: {
+        //     type: Number,
+        //     default: 14,
+        // },
+        // showTitle: {
+        //     type: Boolean,
+        //     default: true,
+        // },
         nodeData: {
             type: Object,
             default: () => ({}),
+        },
+        nodeIndex: {
+            type: Number,
+            default: 0,
         },
         layoutData: {
             type: Object,
@@ -59,23 +63,24 @@ export default {
     },
     setup(props, { emit }) {
         const operateHandle = function (operate) {
-            chartOperate(operate, props.nodeData);
+            chartOperate(operate, props.nodeIndex, props.nodeData);
         };
 
-        const chartOperate = function (operate, data) {
+        const chartOperate = function (operate, index, data) {
             if (operate === 'edit') {
                 // data: 元素本身
-                emit('edit:element', data);
+                emit('edit', index, data);
             } else if (operate === 'refresh') {
                 // data: 元素本身
+                emit('refresh', index, data);
             } else if (operate === 'fullScreen') {
                 // data: 元素本身
                 data.isFullScreen = true;
-                emit('resize:element', data);
+                emit('resize', index, data);
             } else if (operate === 'closefullScreen') {
                 // data: 元素本身
                 data.isFullScreen = false;
-                emit('resize:element', data);
+                emit('resize', index, data);
             }
         };
 

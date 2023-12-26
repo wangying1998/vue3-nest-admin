@@ -45,7 +45,6 @@ export default {
 
         const getData = () => {
             getMenuApi().then(res => {
-                console.log(res.data)
                 data.value = res.data;
             })
         }

@@ -128,7 +128,7 @@ export default {
             addUserApi(toRaw(form))
                 .then((res) => {
                     emit('refresh');
-                    $msg.message('success', '创建成功！');
+                    $msg.message('创建成功！', 'success');
                 })
                 .finally(() => {
                     visible.value = false;
@@ -139,7 +139,7 @@ export default {
             updateUserApi(toRaw(form))
                 .then((res) => {
                     emit('refresh');
-                    $msg.message('success', '编辑成功！');
+                    $msg.message('编辑成功！', 'success');
                 })
                 .finally(() => {
                     visible.value = false;

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-form ref="chartForm" :model="form" :rules="rules" label-width="80px" class="fl-item">
+        <el-form ref="chartForm" :model="form" label-width="80px" class="fl-item">
             <el-form-item label="图表类型">
                 <div class="full-width fl-bet-cen">
                     <div class="fl-sta-cen">
@@ -10,9 +10,7 @@
                         <span class="mr-l-10">{{ currChartType.label }}</span>
                     </div>
 
-                    <el-button type="text" @click="changeChartType">
-                        更换类型
-                    </el-button>
+                    <el-link type="primary" :underline="false" @click="changeChartType">更换类型</el-link>
                 </div>
             </el-form-item>
             <!-- 对应类型的配置项 -->
@@ -62,12 +60,18 @@ export default {
 
         };
 
+        let activeDataBack = {};
+
         watch(
             () => props.activeModule,
-            (val) => {
-                let item = TypeList.find(ele => ele.type === val.type);
+            (data) => {
+                activeDataBack = JSON.parse(JSON.stringify(data));
+                let item = TypeList.find(ele => ele.type === data.type);
                 currChartType.value = item;
             },
+            {
+                deep: true
+            }
         );
 
         return {
@@ -77,6 +81,8 @@ export default {
             dialogVisible,
             chartTypeDialog,
             currChartType,
+
+            activeDataBack,
 
             changeChartType,
             refreshHandle,

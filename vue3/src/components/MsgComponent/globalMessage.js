@@ -7,7 +7,7 @@ const globalMsg = {
             message,
         });
     },
-    confirm: (title, message, type, callback) => {
+    confirm: async (title, message, type, callback) => {
         return ElMessageBox.confirm(message, title || "提示", {
             type,
             confirmButtonText: '确认',

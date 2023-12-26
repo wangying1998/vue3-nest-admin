@@ -23,7 +23,7 @@
                                 filterable
                                 :teleported="false"
                                 @change="planChangeHandle"
-                                class="fl-item"
+                                class="fl-item mr-r-10"
                             >
                                 <el-option
                                     v-for="chartColor in ChartColors"
@@ -48,6 +48,7 @@
                                     </div>
                                 </el-option>
                             </el-select>
+                            <el-link type="primary" :underline="false" @click="resetColorHandle">重置</el-link>
                         </div>
                         <div class="fl-sta-cen mr-t-20">
                             <span class="pop-label">自定义</span>
@@ -63,7 +64,7 @@
                                     <div
                                         class="color-item cursor"
                                         :style="{ 'background-color': color }"
-                                        @click="changeColorHandle(color, index)"
+                                        @click="changeIndexHandle(color, index)"
                                     ></div>
                                 </div>
                             </div>
@@ -90,7 +91,7 @@
                     </template>
                 </el-popover>
             </el-form-item>
-            <el-form-item label="不透明度" size="normal">
+            <el-form-item label="不透明度">
                 <el-slider v-model="opacity" show-input></el-slider>
             </el-form-item>
         </el-form>
@@ -98,55 +99,102 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { ChartColors } from '@/config/chartColors';
+import { useChartStore } from '../../../store/layout-chart';
+
 export default {
     props: {
         activeModule: {
             type: Object,
             default: () => ({})
-        }
+        },
+        activeModuleIndex: {
+            type: Number,
+            default: -1
+        },
     },
-    setup(props) {
-        let currColors = ref([]);
-        currColors.value = [].concat(ChartColors[0].color);
-        let activeTheme = ref('');
-        activeTheme.value = ChartColors[0].theme;
+    setup(props, { emit }) {
+        let form = ref({});
+        let rules = ref({});
 
+        let currColors = ref([]);
+        let activeTheme = ref('');
         let customColor = ref('');
         let activeIndex = ref(0);
-        customColor.value = currColors.value[0];
-
         let opacity = ref(100);
+        let activeDataBack = {};
+        let chartStore = useChartStore();
 
-
-
-        const planChangeHandle = function (theme) {
-            let item = ChartColors.find(ele => ele.theme === theme);
-            currColors.value = item.color;
+        const planChangeHandle = function (value) {
+            activeDataBack.theme = value;
+            
+            let item = ChartColors.find(ele => ele.theme === value);
+            currColors.value = [].concat(item.color);
             activeIndex.value = 0;
-            customColor.value = item.color[0];
+            customColor.value = currColors.value[0];
+            refreshChart(currColors.value);
         };
-        const changeColorHandle = function (color, index) {
+        const changeIndexHandle = function (color, index) {
             activeIndex.value = index;
             customColor.value = color;
         };
         const customColorChange = function (color) {
-            console.log(123, color);
             currColors.value[activeIndex.value] = color;
+            
+            refreshChart(currColors.value);
         };
 
+        /**
+         * 颜色变化后 重新渲染图表
+         * @param {Array} colors 颜色数组
+         */
+        const refreshChart = function(colors) {
+            activeDataBack.color = colors;
+            emit('refresh:chart', props.activeModuleIndex, activeDataBack);
+        }
+
+        const resetColorHandle = function () {
+            let item = ChartColors.find(ele => ele.theme === activeTheme.value);
+            currColors.value = [].concat(item.color);
+            activeIndex.value = 0;
+            customColor.value = currColors.value[0];
+        }
+
+        watch(
+            () => props.activeModule,
+            (data) => {
+                activeDataBack = JSON.parse(JSON.stringify(data));
+                activeTheme.value = data.theme;
+                currColors.value = [].concat(data.color);
+                activeIndex.value = 0;
+                customColor.value = currColors.value[0];
+            },
+            {
+                deep: true
+            }
+        );
+        
         return {
+            props,
             ChartColors,
+            chartStore,
+
             currColors,
             customColor,
             activeTheme,
             activeIndex,
             opacity,
 
+            form,
+            rules,
+
             planChangeHandle,
-            changeColorHandle,
+            changeIndexHandle,
             customColorChange,
+            refreshChart,
+
+            resetColorHandle,
         };
     },
 };

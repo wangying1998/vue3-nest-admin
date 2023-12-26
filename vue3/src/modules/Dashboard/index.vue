@@ -3,19 +3,37 @@
         <el-row :gutter="20">
             <el-col :span="6">
                 <div class="chart-box">
-                    <Chart dom-id="pie-chart" :title="pieChartData.title" :chart-type="pieChartData.type" :chartData="pieChartData.data" />
+                    <Chart
+                        dom-id="pie-chart"
+                        :title="pieChartData.title"
+                        :chart-type="pieChartData.type"
+                        :chart-theme="lineChartData.theme"
+                        :chart-color="lineChartData.color"
+                        :chart-data="pieChartData.data"
+                    />
                 </div>
             </el-col>
             <el-col :span="12">
                 <div class="chart-box">
-                    <Chart dom-id="bar-chart" :title="xBarChartData.title" :chart-type="xBarChartData.type" :chartData="xBarChartData.data" />
+                    <Chart
+                        dom-id="bar-chart"
+                        :title="xBarChartData.title"
+                        :chart-type="xBarChartData.type"
+                        :chart-theme="lineChartData.theme"
+                        :chart-color="lineChartData.color"
+                        :chart-data="xBarChartData.data"
+                    />
                 </div>
             </el-col>
             <el-col :span="6">
                 <div class="chart-box">
                     <ChartHeader title="Timeline" />
                     <ul class="time-list">
-                        <li v-for="(item, index) in timeLine" :key="index" class="fl-sta-cen">
+                        <li
+                            v-for="(item, index) in timeLine"
+                            :key="index"
+                            class="fl-sta-cen"
+                        >
                             <div class="full-width fl-bet-cen">
                                 <span>{{ item.title }}</span>
                                 <span>{{ item.created }}</span>
@@ -35,7 +53,14 @@
         <el-row :gutter="20" class="mr-t-20">
             <el-col :span="24">
                 <div class="chart-box">
-                    <Chart dom-id="line-chart" :title="lineChartData.title" :chart-type="lineChartData.type" :chartData="lineChartData.data" />
+                    <Chart
+                        dom-id="line-chart"
+                        :titleOptions="lineChartData.titleOptions"
+                        :chart-type="lineChartData.type"
+                        :chart-theme="lineChartData.theme"
+                        :chart-color="lineChartData.color"
+                        :chart-data="lineChartData.data"
+                    />
                 </div>
             </el-col>
         </el-row>
@@ -43,10 +68,11 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import ChartHeader from "../../components/ChartComponent/ChartHeader.vue";
+import { onMounted, ref } from 'vue';
+import ChartHeader from '../../components/ChartComponent/ChartHeader.vue';
 import Table from '../../components/TableComponent/Table.vue';
-import Chart from "../../components/ChartComponent/Chart.vue";
+import Chart from '../../components/ChartComponent/Chart.vue';
+import { ChartColors } from '@/config/chartColors';
 
 export default {
     components: {
@@ -62,88 +88,93 @@ export default {
         timeLine = [
             {
                 title: '测试信息',
-                created: '2023-07-18 18:32:24'
+                created: '2023-07-18 18:32:24',
             },
             {
                 title: '测试信息',
-                created: '2023-07-18 18:32:24'
+                created: '2023-07-18 18:32:24',
             },
             {
                 title: '测试信息',
-                created: '2023-07-18 18:32:24'
+                created: '2023-07-18 18:32:24',
             },
             {
                 title: '测试信息',
-                created: '2023-07-18 18:32:24'
+                created: '2023-07-18 18:32:24',
             },
             {
                 title: '测试信息',
-                created: '2023-07-18 18:32:24'
+                created: '2023-07-18 18:32:24',
             },
             {
                 title: '测试信息',
-                created: '2023-07-18 18:32:24'
+                created: '2023-07-18 18:32:24',
             },
             {
                 title: '测试信息',
-                created: '2023-07-18 18:32:24'
+                created: '2023-07-18 18:32:24',
             },
             {
                 title: '测试信息',
-                created: '2023-07-18 18:32:24'
+                created: '2023-07-18 18:32:24',
             },
             {
                 title: '测试信息',
-                created: '2023-07-18 18:32:24'
+                created: '2023-07-18 18:32:24',
             },
         ];
-        
+
         columns = [
             {
                 label: 'name',
-                prop: 'name'
+                prop: 'name',
             },
             {
                 label: 'desc',
-                prop: 'desc'
+                prop: 'desc',
             },
             {
                 label: 'name',
-                prop: 'name'
+                prop: 'name',
             },
             {
                 label: 'desc',
-                prop: 'desc'
+                prop: 'desc',
             },
         ];
 
         tableData = [
             {
                 name: 'test',
-                desc: '测试'
+                desc: '测试',
             },
             {
                 name: 'test',
-                desc: '测试'
+                desc: '测试',
             },
             {
                 name: 'test',
-                desc: '测试'
+                desc: '测试',
             },
             {
                 name: 'test',
-                desc: '测试'
+                desc: '测试',
             },
             {
                 name: 'test',
-                desc: '测试'
+                desc: '测试',
             },
         ];
 
-        
         let lineChartData = {
             type: 'line',
-            title: '趋势图',
+            titleOptions: {
+                title: '趋势图',
+                show: true,
+                fontSize: 14,
+                color: '#121212',
+            },
+            theme: 'classic',
             data: {
                 axis: [
                     '2000-06-05',
@@ -163,7 +194,9 @@ export default {
                         data: [116, 129, 135, 86, 73, 85, 73, 68, 92, 130, 245],
                     },
                     {
-                        data: [139, 115, 111, 309, 206, 137, 128, 85, 94, 71, 106],
+                        data: [
+                            139, 115, 111, 309, 206, 137, 128, 85, 94, 71, 106,
+                        ],
                     },
                     {
                         data: [84, 93, 85, 73, 83, 125, 107, 82, 44, 72, 106],
@@ -172,32 +205,44 @@ export default {
                         data: [66, 91, 92, 113, 107, 131, 111, 64, 69, 88, 77],
                     },
                 ],
-            }
+            },
         };
-        
+
         let xBarChartData = {
             type: 'xbar',
-            title: '柱状图',
+            titleOptions: {
+                title: '柱状图',
+                show: true,
+                fontSize: 14,
+                color: '#121212',
+            },
+            theme: 'classic',
             data: {
                 axis: [
-                    "2000-06-05",
-                    "2000-06-06",
-                    "2000-06-07",
-                    "2000-06-08",
-                    "2000-06-09",
-                    "2000-06-10",
+                    '2000-06-05',
+                    '2000-06-06',
+                    '2000-06-07',
+                    '2000-06-08',
+                    '2000-06-09',
+                    '2000-06-10',
                 ],
                 series: [
                     {
                         data: [116, 129, 135, 86, 73, 85],
                     },
                 ],
-            }
+            },
         };
 
         let pieChartData = {
             type: 'pie',
-            title: '环形图',
+            titleOptions: {
+                title: '环形图',
+                show: true,
+                fontSize: 14,
+                color: '#121212',
+            },
+            theme: 'classic',
             data: {
                 axis: ['测试数据', 'data1', 'data2', 'data3'],
                 series: [
@@ -205,8 +250,24 @@ export default {
                         data: [95, 56, 56, 56],
                     },
                 ],
+            },
+        };
+
+        const initData = function (data) {
+            // 没有颜色列表 使用主题色，有颜色列表使用原有颜色列表
+            if (!data.color || !data.color.length) {
+                let themeColor = ChartColors.find(
+                    (color) => color.theme === data.theme,
+                );
+                data.color = [].concat(themeColor.color);
             }
         };
+
+        onMounted(() => {
+            initData(lineChartData);
+            // initData();
+            // initData();
+        });
 
         return {
             timeLine,
@@ -216,6 +277,8 @@ export default {
             lineChartData,
             xBarChartData,
             pieChartData,
+
+            initData,
         };
     },
 };
