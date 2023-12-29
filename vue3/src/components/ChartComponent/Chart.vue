@@ -176,16 +176,19 @@ export default {
         };
 
         onMounted(() => {
-            let chartOptions = generateChartConfig({
-                type: props.chartType,
-                color: props.chartColor,
-                theme: props.chartTheme,
-                titleOptions: props.titleOptions,
-                ...props.chartData
-            });
-            draw(props.domId, chartOptions);
-
-            window.addEventListener('resize', resize, null, false);
+            nextTick(() => {
+                let chartOptions = generateChartConfig({
+                    type: props.chartType,
+                    color: props.chartColor,
+                    theme: props.chartTheme,
+                    titleOptions: props.titleOptions,
+                    ...props.chartData,
+                    index: parseInt(Math.random()*100)
+                });
+                draw(props.domId, chartOptions);
+    
+                window.addEventListener('resize', resize, null, false);
+            })
         });
 
         onUnmounted(() => {

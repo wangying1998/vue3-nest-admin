@@ -60,6 +60,7 @@
                                 :height="item.chartHeight"
                                 :title-options="item.titleOptions"
                                 :chart-type="item.type"
+                                :chart-theme="item.theme"
                                 :chart-color="item.color"
                                 :chart-data="item.options"
                             />
@@ -166,6 +167,7 @@ export default {
         let chartStore = useChartStore();
 
         let layoutData = chartStore.chartData;
+        // let layoutData = JSON.parse(JSON.stringify(chartStore.chartData));
         // 初始化各个元素的全屏状态为false
         layoutData.forEach((layoutDatum) => {
             layoutDatum.isFullScreen = false;
@@ -184,6 +186,7 @@ export default {
                 function (ev) {
                     mouseXY.x = ev.clientX;
                     mouseXY.y = ev.clientY;
+                    // console.log(222, mouseXY, DragPos)
                 },
                 false,
             );
@@ -199,6 +202,7 @@ export default {
          * @param {*} data
          */
         const drag = function (data) {
+            // console.log(333, mouseXY, DragPos)
             nextTick(() => {
                 let parentRect = document
                     .getElementById('content')
@@ -228,22 +232,22 @@ export default {
                         i: 'drop',
                         ...data,
                     };
-                    node.title = node.i;
+                    console.log(1111111111, node)
                     layoutData.push(node);
                 }
 
                 let index = layoutData.findIndex((item) => item.i === 'drop');
+                // console.log(index)
 
                 if (index !== -1) {
                     try {
-                        gridlayout.value.$refs.item.children[
-                            layoutData.length - 1
-                        ].style.display = 'none';
+                        // gridlayout.value.$refs.item.children[
+                        //     layoutData.length - 1
+                        // ].style.display = 'none';
                     } catch (err) {
                         console.log(err);
                     }
                     let el = gridlayout.value.$refs.item.children[index];
-
                     // 计算相对位置
                     el.dragging = {
                         top: mouseXY.y - parentRect.top,
@@ -257,8 +261,10 @@ export default {
                         mouseXY.y - parentRect.top,
                         mouseXY.x - parentRect.left,
                     );
+                    console.log(new_pos)
 
                     if (mouseInGrid === true) {
+                        console.log(gridlayout.value.dragEvent)
                         gridlayout.value.dragEvent(
                             'dragstart',
                             'drop',
@@ -267,7 +273,8 @@ export default {
                             defaultSize.h,
                             defaultSize.w,
                         );
-                        DragPos.i = Math.random().toString(36).substr(2);
+                        DragPos.i = String(index);
+                        // DragPos.i = Math.random().toString(36).substr(2);
                         DragPos.x = layoutData[index].x;
                         DragPos.y = layoutData[index].y;
                     }
@@ -327,6 +334,7 @@ export default {
                         i: DragPos.i,
                         ...data,
                     };
+                    node.titleOptions.title = node.i;
                     node.title = node.i;
                     layoutData.push(node);
 

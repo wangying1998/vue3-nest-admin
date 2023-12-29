@@ -32,9 +32,9 @@ export default function useCalcLayout() {
     // 是否镜像
     let isMirrored = ref(false);
     // 是否垂直压缩
-    let verticalCompact = ref(true);
+    let verticalCompact = ref(false);
     // 标识是否使用CSS属性 transition-property: transform;
-    let useCssTransforms = ref(true);
+    let useCssTransforms = ref(false);
 
     /**
      * 计算每一列所占宽度
@@ -63,9 +63,11 @@ export default function useCalcLayout() {
         let x = Math.round((left - margin[0]) / (colWidth + margin[0]));
         // Capping
         let y = Math.round((top - margin[1]) / (rowHeight + margin[1]));
-    
+        
         x = Math.max(Math.min(x, colNum - innerW), 0);
         y = Math.max(Math.min(y, maxRows - innerH), 0);
+        
+        // console.log(x, y)
 
         return {
             x: x,

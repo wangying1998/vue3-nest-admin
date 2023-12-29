@@ -38,12 +38,12 @@ const TypeList = [
 
 const DefaultOption = {
     chartHeight: 200,
-    theme: 'default',
+    theme: 'classic',
     titleOptions: {
         title: '趋势图',
-        showTitle: true,
+        show: true,
         fontSize: 14,
-        titleColor: '#121212',
+        color: '#121212',
     },
     options: {
         axis: [
